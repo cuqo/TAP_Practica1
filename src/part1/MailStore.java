@@ -3,14 +3,15 @@ package part1;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MailStore {
-    List<Message> messageList = new ArrayList<>();
+public abstract class MailStore {
+    private List<Message> messageList = new ArrayList<>();
 
-    private void sendNewMessage (){
-
+    public void sendMail (){
     }
 
-    private void retrieveAllMessages() {
+    public abstract ArrayList getMail(String username);
 
+    public List<Message> getMessageList() {
+        return messageList;
     }
 }
