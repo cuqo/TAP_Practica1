@@ -5,8 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MailSystem {
+    //fer hashmap user-mailbox
 
-    public static void main(String[] args){
-
-    }
+    public void createNewUser(){}
 }
