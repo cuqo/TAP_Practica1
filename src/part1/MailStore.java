@@ -9,4 +9,5 @@ public interface  MailStore {
     public List<Message> getMail(String username);
     public List<Message> getAllMessages();
 
+
 }

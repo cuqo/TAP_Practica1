@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MemoryMailStore implements MailStore{
 
-    private ArrayList<Message> mailList = new ArrayList();
+    private List<Message> mailList = new ArrayList();
 
     @Override
     public void sendMail(Message msg) {
@@ -26,5 +26,9 @@ public class MemoryMailStore implements MailStore{
     @Override
     public List<Message> getAllMessages() {
         return mailList;
+    }
+
+    public void setMailList(List<Message> mailList) {
+        this.mailList = mailList;
     }
 }

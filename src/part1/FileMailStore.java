@@ -23,7 +23,6 @@ public class FileMailStore implements MailStore {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public List getMail(String username) {
@@ -31,7 +30,7 @@ public class FileMailStore implements MailStore {
                 .stream()
                 .filter(m -> m.getReceiver().equals(username))
                 .collect(Collectors.toList());
-        }
+    }
 
     @Override
     public List<Message> getAllMessages() {
