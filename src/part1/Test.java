@@ -19,6 +19,7 @@ public class Test {
         //3. Then, use the mailboxes to send a few emails between them. Make some of them share the same subject and make enough so that the following tests have results
         mailbox2.sendMail("user1", "hola Joan", "Hola que tal?");
         mailbox2.sendMail("user3", "hola Maria", "Ei que passa?");
+        mailbox2.sendMail("user1", "hola Joan", "No m'has contestat");
         mailbox1.sendMail("user2", "TFG", "Perque m'has suspes?");
         mailbox3.sendMail("user1", "Cita", "Hola vull quedar amb tu");
         mailbox1.sendMail("user3", "RW: Cita", "Doncs jo no");
@@ -71,9 +72,9 @@ public class Test {
             public boolean test(Message message) {
                 List<User> users = mailSystem.getAllUsers()
                         .stream()
-                        .filter(u -> u.getYearBirth() > 2000)
+                        .filter(u -> u.getYearBirth() < 2000)
                         .collect(Collectors.toList());
-                return  users.stream().map(User::getName).anyMatch(name -> name.equals(message.getReceiver())) && message.getSubject().split(" ").length == 1;
+                return  users.stream().map(User::getUsername).anyMatch(name -> name.equals(message.getReceiver())) && message.getSubject().split(" ").length == 1;
             }
         });
         System.out.print("9: ");

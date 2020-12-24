@@ -19,7 +19,7 @@ public class Mailbox implements UserMailingOperations{
 
     @Override
     public void updateMail() {
-       messages = mailStore.getMail(account.getName());
+       messages = mailStore.getMail(account.getUsername());
 
         Collections.sort(messages, new Comparator<Message>() {
             @Override
@@ -39,7 +39,7 @@ public class Mailbox implements UserMailingOperations{
 
     @Override
     public void sendMail(String destination, String subject, String body) {
-        Message message = new Message(subject, body, account.getName(), destination);
+        Message message = new Message(account.getUsername(), destination, subject, body);
         mailStore.sendMail(message);
     }
 
