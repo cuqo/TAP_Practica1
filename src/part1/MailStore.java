@@ -6,6 +6,7 @@ import java.util.List;
 public interface  MailStore {
 
     public void sendMail (Message msg);
-    public abstract ArrayList getMail(String username);
+    public List<Message> getMail(String username);
+    public List<Message> getAllMessages();
 
 }

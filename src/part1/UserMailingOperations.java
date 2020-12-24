@@ -1,10 +1,13 @@
 package part1;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 public interface UserMailingOperations {
 
     public void updateMail();
-    public void listMail();
+    public List<Message> listMail();
     public void sendMail(String destination, String subject, String body);
-    public void getMail();
-    public void filterUserMail();
+    public List<Message> listSortedMail(int cond);
+    public List<Message> filterUserMail(Predicate<Message> predicate);
 }

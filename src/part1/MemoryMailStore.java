@@ -1,6 +1,7 @@
 package part1;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MemoryMailStore implements MailStore{
 
@@ -11,8 +12,8 @@ public class MemoryMailStore implements MailStore{
         mailList.add(msg);
     }
 
-    public ArrayList getMail(String username){
-        ArrayList<Message> messages = new ArrayList();
+    public List getMail(String username){
+        List<Message> messages = new ArrayList();
 
         for (Message message : mailList){
             if (message.getReceiver().equals(username))
@@ -20,5 +21,10 @@ public class MemoryMailStore implements MailStore{
         }
 
         return messages;
+    }
+
+    @Override
+    public List<Message> getAllMessages() {
+        return mailList;
     }
 }

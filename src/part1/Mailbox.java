@@ -4,19 +4,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Mailbox implements UserMailingOperations{
     private User account;
     private List<Message> messages = new ArrayList<>();
     private MailStore mailStore;
 
-    public Mailbox(User account, int mailStore) {
+    public Mailbox(User account, MailStore mailStore) {
         this.account = account;
-
-        if (mailStore == 0)
-            this.mailStore = new FileMailStore();
-        else
-            this.mailStore = new MemoryMailStore();
+        this.mailStore = mailStore;
     }
 
     @Override
@@ -34,8 +32,9 @@ public class Mailbox implements UserMailingOperations{
     }
 
     @Override
-    public void listMail() {
-        System.out.println(messages.toString());
+    public List<Message> listMail() {
+
+       return messages;
     }
 
     @Override
@@ -45,12 +44,50 @@ public class Mailbox implements UserMailingOperations{
     }
 
     @Override
-    public void getMail() {
+    public List<Message> listSortedMail(int cond) {
+        List<Message> sortedList;
 
+        switch(cond){
+            case 1:
+            sortedList = messages.stream()
+                    .sorted(Comparator.comparing(Message::getSender))
+                    .collect(Collectors.toList());
+                break;
+            case 2:
+                sortedList = messages.stream()
+                        .sorted(Comparator.comparing(Message::getReceiver))
+                        .collect(Collectors.toList());
+                break;
+            case 3:
+                sortedList = messages.stream()
+                        .sorted(Comparator.comparing(Message::getSentTime))
+                        .collect(Collectors.toList());
+                break;
+            case 4:
+                sortedList = messages.stream()
+                        .sorted(Comparator.comparing(Message::getSubject))
+                        .collect(Collectors.toList());
+                break;
+            default:
+                sortedList = messages.stream()
+                        .sorted(Comparator.comparing(Message::getBody))
+                        .collect(Collectors.toList());
+                break;
+
+        }
+
+        return sortedList;
     }
 
     @Override
-    public void filterUserMail() {
+    public List<Message> filterUserMail(Predicate<Message> predicate) {
+        //predicate= m -> m.getSender().equals("Lluis") && m.getBody().startsWith("Hola") ;
 
+        List<Message> filterList = messages
+                .stream()
+                .filter(predicate)
+                .collect(Collectors.toList());
+
+        return filterList;
     }
 }
