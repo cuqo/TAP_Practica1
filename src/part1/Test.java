@@ -1,7 +1,9 @@
 package part1;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -36,7 +38,7 @@ public class Test {
         msg.forEach(System.out::println);
 
         //6. Now list the messages by sender username using the mailbox feature.
-        msg = mailbox1.listSortedMail(1);
+        msg = mailbox1.listSortedMail("sender");
         System.out.print("6: ");
         msg.forEach(System.out::println);
 

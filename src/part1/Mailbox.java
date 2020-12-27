@@ -44,26 +44,26 @@ public class Mailbox implements UserMailingOperations{
     }
 
     @Override
-    public List<Message> listSortedMail(int cond) {
+    public List<Message> listSortedMail(String cond) {
         List<Message> sortedList;
 
         switch(cond){
-            case 1:
+            case "sender":
             sortedList = messages.stream()
                     .sorted(Comparator.comparing(Message::getSender))
                     .collect(Collectors.toList());
                 break;
-            case 2:
+            case "receiver":
                 sortedList = messages.stream()
                         .sorted(Comparator.comparing(Message::getReceiver))
                         .collect(Collectors.toList());
                 break;
-            case 3:
+            case "sentTime":
                 sortedList = messages.stream()
                         .sorted(Comparator.comparing(Message::getSentTime))
                         .collect(Collectors.toList());
                 break;
-            case 4:
+            case "subject":
                 sortedList = messages.stream()
                         .sorted(Comparator.comparing(Message::getSubject))
                         .collect(Collectors.toList());

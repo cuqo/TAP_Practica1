@@ -35,6 +35,8 @@ public class MailSystem {
 
     }
 
+    public Map<String, Mailbox> getAllMailboxes() { return mapUsers; }
+
     public List<User> getAllUsers() {
         return userList;
     }
