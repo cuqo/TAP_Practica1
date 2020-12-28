@@ -126,4 +126,11 @@ public class MailSystem {
         }
     }
 
+    public MailStore getMailStore() {
+        return mailStore;
+    }
+
+    public void setMailStore(MailStore mailStore) {
+        this.mailStore = mailStore;
+    }
 }

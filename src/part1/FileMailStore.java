@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FileMailStore implements MailStore {
+public class FileMailStore extends MailStore {
 
     @Override
     public void sendMail(Message msg) {

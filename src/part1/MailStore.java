@@ -3,11 +3,11 @@ package part1;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface  MailStore {
+public abstract class  MailStore {
 
-    public void sendMail (Message msg);
-    public List<Message> getMail(String username);
-    public List<Message> getAllMessages();
+    public abstract void sendMail (Message msg);
+    public abstract List<Message> getMail(String username);
+    public abstract List<Message> getAllMessages();
 
 
 }

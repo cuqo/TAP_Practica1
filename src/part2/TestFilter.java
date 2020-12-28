@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class Test {
+public class TestFilter {
 
     public static void main(String[] args) {
         //1. Initialize the mail system with an in-memory mail store.

@@ -3,7 +3,7 @@ package part1;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemoryMailStore implements MailStore{
+public class MemoryMailStore extends MailStore{
 
     private List<Message> mailList = new ArrayList();
 

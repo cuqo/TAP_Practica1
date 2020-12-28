@@ -63,4 +63,8 @@ public class Message {
     public String toStringFile() {
         return sender + ';' + receiver + ';' + sentTime + ';' + subject + ";" + body + ";\n";
     }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
 }
