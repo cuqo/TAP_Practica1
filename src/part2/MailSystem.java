@@ -1,10 +1,13 @@
-package part1;
+package part2;
+
+import part1.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -12,7 +15,7 @@ public class MailSystem {
     //fer hashmap user-mailbox
     private MailStore mailStore;
     private List<User> userList;
-    private Map<String, Mailbox> mapUsers;
+    private Map<String, MailboxPart2> mapUsers;
 
     public MailSystem() {
     }
@@ -20,12 +23,14 @@ public class MailSystem {
     public MailSystem(MailStore mailStore) {
         this.mailStore = mailStore;
         this.userList = new ArrayList<>();
-        this.mapUsers = new HashMap<String, Mailbox>();
+        this.mapUsers = new HashMap<String, MailboxPart2>();
     }
 
-    public Mailbox createNewUser(String username, String name, int yearBirth) {
+    public MailboxPart2 createNewUser(String username, String name, int yearBirth) {
         User user = new User(username, name, yearBirth);
-        Mailbox mailbox = new Mailbox(user, mailStore);
+        MailboxPart2 mailbox = new MailboxPart2(user, mailStore);
+        mailbox.attach(new SpamUserFilter());
+        mailbox.attach(new TooLongFilter());
 
         userList.add(user);
         mapUsers.put(username, mailbox);
@@ -38,7 +43,7 @@ public class MailSystem {
 
     }
 
-    public Map<String, Mailbox> getAllMailboxes() { return mapUsers; }
+    public Map<String, MailboxPart2> getAllMailboxes() { return mapUsers; }
 
     public List<User> getAllUsers() {
         return userList;

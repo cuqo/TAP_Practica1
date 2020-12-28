@@ -6,26 +6,28 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CLI { public static void main(String[] args){
-    MailSystem mailSystem = new MailSystem(new MemoryMailStore());
-    cliOperations(mailSystem);
-}
+public class CLI {
+    public static void main(String[] args) {
+        MailSystem mailSystem = new MailSystem(new MemoryMailStore());
+        cliOperations(mailSystem);
+    }
 
-    public static void cliOperations(MailSystem mailSystem){
+    public static void cliOperations(MailSystem mailSystem) {
         Scanner teclat = new Scanner(System.in);
         String line = "";
-        while(!line.equals("exit")){
+        while (!line.equals("exit")) {
             menuCLI();
             line = teclat.nextLine();
             String[] lineSplit = line.split(" ");
-            switch (lineSplit[0]){
+            switch (lineSplit[0]) {
                 case "createuser":
-                    if(lineSplit.length < 3) System.out.println("Error al crear usuari: createuser <username> <name> <birthYear>");
+                    if (lineSplit.length < 3)
+                        System.out.println("Error al crear usuari: createuser <username> <name> <birthYear>");
                     else mailSystem.createNewUser(lineSplit[1], lineSplit[2], Integer.parseInt(lineSplit[3]));
                     break;
                 case "filter":
                     List<Message> msg;
-                    switch (lineSplit[1]){
+                    switch (lineSplit[1]) {
                         case "contains":
                             msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
                                 @Override
@@ -47,8 +49,8 @@ public class CLI { public static void main(String[] args){
                     }
                     break;
                 case "logas":
-                    mailSystem.getAllUsers().forEach( (u) -> {
-                        if(u.getUsername().equals(lineSplit[1])) {
+                    mailSystem.getAllUsers().forEach((u) -> {
+                        if (u.getUsername().equals(lineSplit[1])) {
                             System.out.println("Correct user");
                             cliUser(mailSystem.getAllMailboxes().get(lineSplit[1]), lineSplit[1]);
                         }
@@ -63,16 +65,16 @@ public class CLI { public static void main(String[] args){
         }
     }
 
-    public static void cliUser(Mailbox mailbox, String username){
+    public static void cliUser(Mailbox mailbox, String username) {
         Scanner teclat = new Scanner(System.in);
         String line = "";
         List<Message> msg;
-        while(!line.equals("logout")){
+        while (!line.equals("logout")) {
             menuUserCLI();
             System.out.print("<" + username + ">: ");
             line = teclat.nextLine();
             String[] lineSplit = line.split(" ");
-            switch (lineSplit[0]){
+            switch (lineSplit[0]) {
                 case "send":
                     String[] lineSplitComa = line.split("\"");
                     mailbox.sendMail(lineSplit[1], lineSplitComa[1], lineSplitComa[3]);
@@ -89,7 +91,7 @@ public class CLI { public static void main(String[] args){
                     msg.forEach(System.out::println);
                     break;
                 case "filter":
-                    switch (lineSplit[1]){
+                    switch (lineSplit[1]) {
                         case "contains":
                             msg = mailbox.filterUserMail(new Predicate<Message>() {
                                 @Override
@@ -119,7 +121,7 @@ public class CLI { public static void main(String[] args){
         }
     }
 
-    public static void menuCLI(){
+    public static void menuCLI() {
         System.out.println("***********************************************");
         System.out.println("*- createuser <username> <name> <birthYear>   *");
         System.out.println("*- filter <contains> <word> / <lessthan> <n>  *");
@@ -128,7 +130,7 @@ public class CLI { public static void main(String[] args){
         System.out.println("***********************************************");
     }
 
-    public static void menuUserCLI(){
+    public static void menuUserCLI() {
         System.out.println("*****************************************************************");
         System.out.println("*- send <to> \"subject\" \"body\"                                   *");
         System.out.println("*- update                                                       *");

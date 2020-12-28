@@ -9,8 +9,11 @@ import java.util.stream.Collectors;
 
 public class Mailbox implements UserMailingOperations{
     private User account;
-    private List<Message> messages = new ArrayList<>();
+    protected List<Message> messages = new ArrayList<>();
     private MailStore mailStore;
+
+    public Mailbox() {
+    }
 
     public Mailbox(User account, MailStore mailStore) {
         this.account = account;
