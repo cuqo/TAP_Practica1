@@ -1,37 +1,40 @@
 package part2;
 
 
+
 import part1.MailStore;
 import part1.Message;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.List;
 
 public class BodyDecorator extends MailStore {
 
     private MailStore mailStore;
+    private Context context;
 
-    public BodyDecorator(MailStore mailStore) {
+    public BodyDecorator(MailStore mailStore, Context context) {
         this.mailStore = mailStore;
+        this.context = context;
     }
 
     @Override
     public void sendMail(Message msg) {
-        StringBuilder output = new StringBuilder(msg.getBody()).reverse();
-        msg.setBody(output.toString());
+        String body = context.sendMailStrategy(msg.getBody());
+        //System.out.println(body);
+        msg.setBody(body);
         mailStore.sendMail(msg);
     }
 
     @Override
     public List<Message> getMail(String username) {
-        List<Message> msg = mailStore.getMail(username);
-        msg.forEach(message -> {
-            StringBuilder output = new StringBuilder(message.getBody()).reverse();
-            message.setBody(output.toString());
+        List<Message> msgList = mailStore.getMail(username);
+        msgList.forEach(message -> {
+            //System.out.println(message.getBody());
+            String body = context.getMailStrategy(message.getBody());
+            message.setBody(body);
         });
 
-        return msg;
+        return msgList;
     }
 
     @Override

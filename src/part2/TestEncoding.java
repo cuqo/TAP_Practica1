@@ -8,8 +8,9 @@ import java.util.List;
 
 public class TestEncoding {
     public static void main(String[] args) {
+        Context context = new Context(new CipherBody());
         MailSystem mailSystem = new MailSystem(new MemoryMailStore());
-        MailStore mailStore = new BodyDecorator(mailSystem.getMailStore());
+        MailStore mailStore = new BodyDecorator(mailSystem.getMailStore(), context);
         mailSystem.setMailStore(mailStore);
 
         //2. Create at least 3 users, two have the same name but different username.

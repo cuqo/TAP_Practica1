@@ -1,5 +1,6 @@
 package part2;
 
+
 import part1.*;
 
 import java.io.FileWriter;
@@ -23,7 +24,7 @@ public class MailSystem {
     public MailSystem(MailStore mailStore) {
         this.mailStore = mailStore;
         this.userList = new ArrayList<>();
-        this.mapUsers = new HashMap<String, MailboxPart2>();
+        this.mapUsers = new HashMap<>();
     }
 
     public MailboxPart2 createNewUser(String username, String name, int yearBirth) {
@@ -53,12 +54,10 @@ public class MailSystem {
         //predicate= m -> m.getSender().equals("Lluis") && m.getBody().startsWith("Hola") ;
 
 
-        List<Message> filterList = getAllMessages()
+        return getAllMessages()
                 .stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
-
-        return filterList;
     }
 
     public int countTotalMessages() {
@@ -105,7 +104,7 @@ public class MailSystem {
 
     public void changeMailStore() {
         if (mailStore instanceof MemoryMailStore) {
-            FileWriter myWriter = null;
+            FileWriter myWriter;
 
             try {
                 List<Message> msg = mailStore.getAllMessages();
