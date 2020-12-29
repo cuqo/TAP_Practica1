@@ -1,8 +1,14 @@
 package part1;
 
+import part4.Config;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Config(
+        store = "part1.MemoryMailStore",
+        log = true
+)
 public class MemoryMailStore extends MailStore{
 
     private List<Message> mailList = new ArrayList();

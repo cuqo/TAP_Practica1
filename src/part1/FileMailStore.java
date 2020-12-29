@@ -1,5 +1,7 @@
 package part1;
 
+import part4.Config;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -10,6 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Config(
+        store = "part1.FileMailStore",
+        log = true
+)
 public class FileMailStore extends MailStore {
 
     @Override
