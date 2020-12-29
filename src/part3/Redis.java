@@ -7,13 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Redis {
-    private Jedis jedis;
+public class Redis extends Jedis {
+
+    private static Jedis jedis = new Jedis("localhost"); ;
     private static int counter = 1;
 
-    public Redis() {
-        jedis = new Jedis("localhost");
-    }
+    public Redis() { }
+
+    public static Redis getInstance() { return (Redis) jedis; }
 
     public void lpushMail(Message msg) {
         jedis.lpush(msg.getReceiver(),msg.toStringRedis());

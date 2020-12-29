@@ -1,21 +1,18 @@
 package part3;
 
-import part1.MailSystem;
 import part1.Mailbox;
 import part1.Message;
 import part1.User;
-import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class Test {
+public class TestFactory {
     public static void main(String[] args) {
 
-        Redis redis = new Redis();
-        MailSystem mailSystem = new MailSystem(new RedisMailStore(redis));
+        MailSystem mailSystem = new MailSystem(new MemoryMailStoreFactory());
 
         Mailbox mailbox1 = mailSystem.createNewUser("user1", "Joan", 2000);
         Mailbox mailbox2 = mailSystem.createNewUser("user2", "Joan", 2005);
