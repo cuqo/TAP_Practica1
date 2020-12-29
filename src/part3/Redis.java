@@ -9,12 +9,15 @@ import java.util.Set;
 
 public class Redis extends Jedis {
 
-    private static Jedis jedis = new Jedis("localhost"); ;
+    private static Redis redis = new Redis();
+    private Jedis jedis;
     private static int counter = 1;
 
-    public Redis() { }
+    public Redis() {
+        jedis = new Jedis("localhost");
+    }
 
-    public static Redis getInstance() { return (Redis) jedis; }
+    public static Redis getInstance() { return redis; }
 
     public void lpushMail(Message msg) {
         jedis.lpush(msg.getReceiver(),msg.toStringRedis());
