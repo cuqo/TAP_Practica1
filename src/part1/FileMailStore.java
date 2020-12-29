@@ -39,7 +39,7 @@ public class FileMailStore extends MailStore {
     }
 
     private List<Message> readFile() {
-        ArrayList<Message> messageList = new ArrayList<>();
+        List<Message> messageList = new ArrayList<>();
         try {
             Scanner scan = new Scanner(new File("messages.txt"));
             while (scan.hasNext()) {
