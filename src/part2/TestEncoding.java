@@ -1,5 +1,6 @@
 package part2;
 
+import part1.FileMailStore;
 import part1.MailStore;
 import part1.MemoryMailStore;
 import part1.Message;
@@ -8,9 +9,10 @@ import java.util.List;
 
 public class TestEncoding {
     public static void main(String[] args) {
-        Context context = new Context(new CipherBody());
-        MailSystem mailSystem = new MailSystem(new MemoryMailStore());
-        MailStore mailStore = new BodyDecorator(mailSystem.getMailStore(), context);
+        Context context1 = new Context(new ReverseBody());
+        Context context2 = new Context(new CipherBody());
+        MailSystem mailSystem = new MailSystem(new FileMailStore());
+        MailStore mailStore = new BodyDecorator(mailSystem.getMailStore(), context1, context2);
         mailSystem.setMailStore(mailStore);
 
         //2. Create at least 3 users, two have the same name but different username.

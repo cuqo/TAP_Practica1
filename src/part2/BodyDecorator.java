@@ -10,17 +10,19 @@ import java.util.List;
 public class BodyDecorator extends MailStore {
 
     private MailStore mailStore;
-    private Context context;
+    private Context context1;
+    private Context context2;
 
-    public BodyDecorator(MailStore mailStore, Context context) {
+    public BodyDecorator(MailStore mailStore, Context context1, Context context2) {
         this.mailStore = mailStore;
-        this.context = context;
+        this.context1 = context1;
+        this.context2 = context2;
     }
 
     @Override
     public void sendMail(Message msg) {
-        String body = context.sendMailStrategy(msg.getBody());
-        //System.out.println(body);
+        String body = context1.sendMailStrategy(msg.getBody());
+        body = context2.sendMailStrategy(body);
         msg.setBody(body);
         mailStore.sendMail(msg);
     }
@@ -29,8 +31,8 @@ public class BodyDecorator extends MailStore {
     public List<Message> getMail(String username) {
         List<Message> msgList = mailStore.getMail(username);
         msgList.forEach(message -> {
-            //System.out.println(message.getBody());
-            String body = context.getMailStrategy(message.getBody());
+            String body = context2.getMailStrategy(message.getBody());
+            body = context1.getMailStrategy(body);
             message.setBody(body);
         });
 

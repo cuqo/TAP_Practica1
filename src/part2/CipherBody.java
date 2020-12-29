@@ -13,16 +13,26 @@ import java.util.List;
 
 public class CipherBody implements Strategy{
 
+    private Cipher cipher;
+    private java.security.Key aesKey;
+
+    public CipherBody() {
+        String key = "IWantToPassTAP12"; // 128 bit key
+        aesKey =
+                new javax.crypto.spec.SecretKeySpec(key.getBytes(), "AES");
+        try {
+            cipher = Cipher.getInstance("AES");
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String sendMail(String body) {
-        String key = "IWantToPassTAP12"; // 128 bit key
-        java.security.Key aesKey =
-                new javax.crypto.spec.SecretKeySpec(key.getBytes(), "AES");
-        Cipher cipher;
+
         byte[] encrypted = new byte[0];
 
         try {
-            cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, aesKey);
             encrypted = cipher.doFinal(body.getBytes());
         } catch (Exception e) {
@@ -34,15 +44,10 @@ public class CipherBody implements Strategy{
 
     @Override
     public String getMail(String body) {
-        String key = "IWantToPassTAP12"; // 128 bit key
-        java.security.Key aesKey =
-                new javax.crypto.spec.SecretKeySpec(key.getBytes(), "AES");
-        Cipher cipher;
-
         byte[] encrypted = Base64.getDecoder().decode(body.getBytes());
         String decrypted = null;
+
         try {
-            cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, aesKey);
             decrypted = new String(cipher.doFinal(encrypted));
         } catch (Exception e) {
@@ -51,5 +56,8 @@ public class CipherBody implements Strategy{
 
         return decrypted;
     }
+
+
+
 
 }
