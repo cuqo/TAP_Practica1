@@ -41,6 +41,14 @@ public class BodyDecorator extends MailStore {
 
     @Override
     public List<Message> getAllMessages() {
-        return mailStore.getAllMessages();
+        List<Message> msgList = mailStore.getAllMessages();
+        msgList.forEach(message -> {
+            String body = context2.getMailStrategy(message.getBody());
+            body = context1.getMailStrategy(body);
+            message.setBody(body);
+        });
+
+        return msgList;
+        /*return mailStore.getAllMessages();*/
     }
 }
