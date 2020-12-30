@@ -1,15 +1,12 @@
 package part1;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Test {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         //1. Initialize the mail system with an in-memory mail store.
         MailSystem mailSystem = new MailSystem(new MemoryMailStore());
 
@@ -46,12 +43,7 @@ public class Test {
         //  - The message subject contains a certain word.
         //  - The message sender is a certain user
 
-        msg = mailbox1.filterUserMail(new Predicate<Message>() {
-            @Override
-            public boolean test(Message message) {
-                return message.getSubject().contains("hola") && message.getSender().equals("user2");
-            }
-        });
+        msg = mailbox1.filterUserMail(message -> message.getSubject().contains("hola") && message.getSender().equals("user2"));
         System.out.print("7: ");
         msg.forEach(System.out::println);
 
@@ -69,40 +61,37 @@ public class Test {
                 .filter(e -> users.stream().map(User::getName).anyMatch(name -> name.equals(e.getReceiver())) && e.getSubject().split(" ").length == 1)
                 .collect(Collectors.toList());*/
 
-        msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-            @Override
-            public boolean test(Message message) {
-                List<User> users = mailSystem.getAllUsers()
-                        .stream()
-                        .filter(u -> u.getYearBirth() < 2000)
-                        .collect(Collectors.toList());
-                return  users.stream().map(User::getUsername).anyMatch(name -> name.equals(message.getReceiver())) && message.getSubject().split(" ").length == 1;
-            }
+        msg = mailSystem.filterMessageGlobally(message -> {
+            List<User> users = mailSystem.getAllUsers()
+                    .stream()
+                    .filter(u -> u.getYearBirth() < 2000)
+                    .collect(Collectors.toList());
+            return users.stream().map(User::getUsername).anyMatch(name -> name.equals(message.getReceiver())) && message.getSubject().split(" ").length == 1;
         });
         System.out.print("9: ");
         msg.forEach(System.out::println);
 
         //10. Get the count of messages in the system and print it.
-        System.out.println("10: " +mailSystem.countTotalMessages());
+        System.out.println("10: " + mailSystem.countTotalMessages());
 
         //11. Get the average number of messages received per user and print it.
-        System.out.println("11: " +mailSystem.avgPerUser());
+        System.out.println("11: " + mailSystem.avgPerUser());
 
         //12. Group the messages per subject in a Map<String, List<Message>> and print it.
         Map<String, List<Message>> map = mailSystem.groupPerSubject();
-        System.out.println("12: " +map);
+        System.out.println("12: " + map);
 
         //13. Count the words of all messages sent by users with a certain real name.
         int count = mailSystem.countParticularName("Maria");
-        System.out.println("13: " +count);
+        System.out.println("13: " + count);
 
         //14. Use the name that you used on two users. Print the result.
         count = mailSystem.countParticularName("Joan");
-        System.out.println("14: " +count);
+        System.out.println("14: " + count);
 
         //15. Print the messages received by users born before year 2000.
         msg = mailSystem.messagesBornBefore(2000);
-        System.out.println("15: " +msg);
+        System.out.println("15: " + msg);
 
         //16. Now change the mail store to the file implementation
         mailSystem.changeMailStore();

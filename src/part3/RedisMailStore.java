@@ -2,7 +2,6 @@ package part3;
 
 import part1.MailStore;
 import part1.Message;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,9 +10,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class RedisMailStore extends MailStore {
+public class RedisMailStore implements MailStore {
 
-    private Redis redis;
+    private final Redis redis;
 
     public RedisMailStore(Redis redis) {
         this.redis = redis;
@@ -28,11 +27,11 @@ public class RedisMailStore extends MailStore {
     public List<Message> getMail(String username) {
         List<String> redisMsg = redis.lrangeMail(username);
         List<Message> messageList = new ArrayList<>();
-        redisMsg.forEach(str ->{
+        redisMsg.forEach(str -> {
             String[] msg = str.split(";");
 
 
-            DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz YYYY", Locale.ENGLISH);
+            DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
             Date date = null;
             try {
                 date = format.parse(msg[2]);
@@ -50,21 +49,19 @@ public class RedisMailStore extends MailStore {
         List<Message> messageList = new ArrayList<>();
         List<List<String>> redisList = redis.allMail();
 
-        redisList.forEach(key -> {
-            key.forEach(str -> {
-                String[] msg = str.split(";");
+        redisList.forEach(key -> key.forEach(str -> {
+            String[] msg = str.split(";");
 
-                DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz YYYY", Locale.ENGLISH);
-                Date date = null;
-                try {
-                    date = format.parse(msg[2]);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                Message aux = new Message(msg[0], msg[1], date, msg[3], msg[4]);
-                messageList.add(aux);
-            });
-        });
+            DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+            Date date = null;
+            try {
+                date = format.parse(msg[2]);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Message aux = new Message(msg[0], msg[1], date, msg[3], msg[4]);
+            messageList.add(aux);
+        }));
 
         return messageList;
     }

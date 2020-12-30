@@ -1,9 +1,9 @@
 package part1;
 
 public class User {
-    private String username;
-    private String name;
-    private int yearBirth;
+    private final String username;
+    private final String name;
+    private final int yearBirth;
 
     public User(String username, String name, int yearBirth) {
         this.username = username;

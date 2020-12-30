@@ -2,159 +2,65 @@ package part4;
 
 import part1.*;
 
+import java.io.File;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class TestConfig {
     public static void main(String[] args) {
-        Class<FileMailStore> obj = FileMailStore.class;
+        List<Class> mailStoreClasses = new ArrayList<>();
         MailSystem mailSystem = new MailSystem();
 
-        if(obj.isAnnotationPresent(Config.class)){
-            Annotation annotation = obj.getAnnotation(Config.class);
-            Config config = (Config) annotation;
-            try {
-                mailSystem.readMailStore(config);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
+        mailStoreClasses.add(MemoryMailStore.class);
+        mailStoreClasses.add(FileMailStore.class);
+
+        for (Class mailStoreClass : mailStoreClasses) {
+            if (mailStoreClass.isAnnotationPresent(Config.class)) {
+                Annotation annotation = mailStoreClass.getAnnotation(Config.class);
+                Config config = (Config) annotation;
+                try {
+                    mailSystem.readMailStore(config);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
+
+                //2. Create at least 3 users, two have the same name but different username.
+                Mailbox mailbox1 = mailSystem.createNewUser("user1", "Joan", 2000);
+                Mailbox mailbox2 = mailSystem.createNewUser("user2", "Joan", 2005);
+                Mailbox mailbox3 = mailSystem.createNewUser("user3", "Maria", 1999);
+
+                //3. Then, use the mailboxes to send a few emails between them. Make some of them share the same subject and make enough so that the following tests have results
+                mailbox2.sendMail("user1", "hola Joan", "Hola que tal?");
+                mailbox2.sendMail("user3", "hola Maria", "Ei que passa?");
+                mailbox2.sendMail("user1", "hola Joan", "No m'has contestat");
+                mailbox1.sendMail("user2", "TFG", "Perque m'has suspes?");
+                mailbox3.sendMail("user1", "Cita", "Hola vull quedar amb tu");
+                mailbox1.sendMail("user3", "RW: Cita", "Doncs jo no");
+                mailbox2.sendMail("user3", "Consulta", "Tens covid?");
+
+                //4. Get one of the mailboxes and update its mail.
+                mailbox1.updateMail();
+                mailbox2.updateMail();
+                mailbox3.updateMail();
+
+                //5. List the mailbox messages in the console. (Sorted by newer first.) Use the iterable capabilities of the mailbox!
+                List<Message> msg = mailbox1.listMail();
+                System.out.print("5: ");
+                msg.forEach(System.out::println);
+
+                //8. Use the mail system object to retrieve all messages and print them
+                msg = mailSystem.getAllMessages();
+                System.out.print("8: ");
+                msg.forEach(System.out::println);
             }
         }
-
-        cliOperations(mailSystem);
-    }
-
-    public static void cliOperations(MailSystem mailSystem) {
-        Scanner teclat = new Scanner(System.in);
-        String line = "";
-        while (!line.equals("exit")) {
-            menuCLI();
-            line = teclat.nextLine();
-            String[] lineSplit = line.split(" ");
-            switch (lineSplit[0]) {
-                case "createuser":
-                    if (lineSplit.length < 3)
-                        System.out.println("Error al crear usuari: createuser <username> <name> <birthYear>");
-                    else mailSystem.createNewUser(lineSplit[1], lineSplit[2], Integer.parseInt(lineSplit[3]));
-                    break;
-                case "filter":
-                    List<Message> msg;
-                    switch (lineSplit[1]) {
-                        case "contains":
-                            msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getSubject().contains(lineSplit[2]) || message.getBody().contains(lineSplit[2]);
-                                }
-                            });
-                            msg.forEach(System.out::println);
-                            break;
-                        case "lessthan":
-                            msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getBody().split(" ").length < Integer.parseInt(lineSplit[2]);
-                                }
-                            });
-                            msg.forEach(System.out::println);
-                            break;
-                    }
-                    break;
-                case "logas":
-                    mailSystem.getAllUsers().forEach((u) -> {
-                        if (u.getUsername().equals(lineSplit[1])) {
-                            System.out.println("Correct user");
-                            cliUser(mailSystem.getAllMailboxes().get(lineSplit[1]), lineSplit[1]);
-                        }
-                    });
-                    break;
-                case "exit":
-                    break;
-                default:
-                    System.out.println("Error, command doesnt exist");
-                    break;
-            }
-        }
-    }
-
-    public static void cliUser(Mailbox mailbox, String username) {
-        Scanner teclat = new Scanner(System.in);
-        String line = "";
-        List<Message> msg;
-        while (!line.equals("logout")) {
-            menuUserCLI();
-            System.out.print("<" + username + ">: ");
-            line = teclat.nextLine();
-            String[] lineSplit = line.split(" ");
-            switch (lineSplit[0]) {
-                case "send":
-                    String[] lineSplitComa = line.split("\"");
-                    mailbox.sendMail(lineSplit[1], lineSplitComa[1], lineSplitComa[3]);
-                    break;
-                case "update":
-                    mailbox.updateMail();
-                    break;
-                case "list":
-                    msg = mailbox.listMail();
-                    msg.forEach(System.out::println);
-                    break;
-                case "sort":
-                    msg = mailbox.listSortedMail(lineSplit[1]);
-                    msg.forEach(System.out::println);
-                    break;
-                case "filter":
-                    switch (lineSplit[1]) {
-                        case "contains":
-                            msg = mailbox.filterUserMail(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getSubject().contains(lineSplit[2]) || message.getBody().contains(lineSplit[2]);
-                                }
-                            });
-                            msg.forEach(System.out::println);
-                            break;
-                        case "lessthan":
-                            msg = mailbox.filterUserMail(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getBody().split(" ").length < Integer.parseInt(lineSplit[2]);
-                                }
-                            });
-                            msg.forEach(System.out::println);
-                            break;
-                    }
-                    break;
-                case "logout":
-                    break;
-                default:
-                    System.out.println("Error, command doesnt exist");
-                    break;
-            }
-        }
-    }
-
-    public static void menuCLI() {
-        System.out.println("***********************************************");
-        System.out.println("*- createuser <username> <name> <birthYear>   *");
-        System.out.println("*- filter <contains> <word> / <lessthan> <n>  *");
-        System.out.println("*- logas <username>                           *");
-        System.out.println("*- exit                                       *");
-        System.out.println("***********************************************");
-    }
-
-    public static void menuUserCLI() {
-        System.out.println("*****************************************************************");
-        System.out.println("*- send <to> \"subject\" \"body\"                                   *");
-        System.out.println("*- update                                                       *");
-        System.out.println("*- list                                                         *");
-        System.out.println("*- sort <sender> / <receiver> / <sentTime> / <body> / <subject> *");
-        System.out.println("*- filter <contains> <word> / <lessthan> <n>                    *");
-        System.out.println("*- logout                                                       *");
-        System.out.println("*****************************************************************");
     }
 }
+

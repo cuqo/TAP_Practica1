@@ -1,20 +1,14 @@
 package part2;
 
-import part1.Message;
-
-import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-import java.util.List;
 
-public class CipherBody implements Strategy{
+public class CipherBody implements Strategy {
 
     private Cipher cipher;
-    private java.security.Key aesKey;
+    private final java.security.Key aesKey;
 
     public CipherBody() {
         String key = "IWantToPassTAP12"; // 128 bit key
@@ -56,8 +50,6 @@ public class CipherBody implements Strategy{
 
         return decrypted;
     }
-
-
 
 
 }

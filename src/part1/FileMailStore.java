@@ -1,7 +1,6 @@
 package part1;
 
 import part4.Config;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -16,12 +15,12 @@ import java.util.stream.Collectors;
         store = "part1.FileMailStore",
         log = true
 )
-public class FileMailStore extends MailStore {
+public class FileMailStore implements MailStore {
 
     @Override
     public void sendMail(Message msg) {
 
-        FileWriter myWriter = null;
+        FileWriter myWriter;
         try {
             myWriter = new FileWriter("messages.txt", true);
             myWriter.write(msg.toStringFile());
@@ -31,7 +30,7 @@ public class FileMailStore extends MailStore {
         }
     }
 
-    public List getMail(String username) {
+    public List<Message> getMail(String username) {
         return readFile()
                 .stream()
                 .filter(m -> m.getReceiver().equals(username))
@@ -53,7 +52,7 @@ public class FileMailStore extends MailStore {
                 String[] msg = line.split(";");
 
 
-                DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz YYYY", Locale.ENGLISH);
+                DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                 Date date = format.parse(msg[2]);
                 Message aux = new Message(msg[0], msg[1], date, msg[3], msg[4]);
                 messageList.add(aux);

@@ -3,11 +3,9 @@ package part3;
 import part1.Mailbox;
 import part1.Message;
 import part1.User;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TestFactory {
@@ -53,12 +51,7 @@ public class TestFactory {
             //  - The message subject contains a certain word.
             //  - The message sender is a certain user
 
-            msg = mailbox1.filterUserMail(new Predicate<Message>() {
-                @Override
-                public boolean test(Message message) {
-                    return message.getSubject().contains("hola") && message.getSender().equals("user2");
-                }
-            });
+            msg = mailbox1.filterUserMail(message -> message.getSubject().contains("hola") && message.getSender().equals("user2"));
             System.out.print("7: ");
             msg.forEach(System.out::println);
 
@@ -76,15 +69,12 @@ public class TestFactory {
                 .filter(e -> users.stream().map(User::getName).anyMatch(name -> name.equals(e.getReceiver())) && e.getSubject().split(" ").length == 1)
                 .collect(Collectors.toList());*/
 
-            msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-                @Override
-                public boolean test(Message message) {
-                    List<User> users = mailSystem.getAllUsers()
-                            .stream()
-                            .filter(u -> u.getYearBirth() < 2000)
-                            .collect(Collectors.toList());
-                    return users.stream().map(User::getUsername).anyMatch(name -> name.equals(message.getReceiver())) && message.getSubject().split(" ").length == 1;
-                }
+            msg = mailSystem.filterMessageGlobally(message -> {
+                List<User> users = mailSystem.getAllUsers()
+                        .stream()
+                        .filter(u -> u.getYearBirth() < 2000)
+                        .collect(Collectors.toList());
+                return users.stream().map(User::getUsername).anyMatch(name -> name.equals(message.getReceiver())) && message.getSubject().split(" ").length == 1;
             });
             System.out.print("9: ");
             msg.forEach(System.out::println);

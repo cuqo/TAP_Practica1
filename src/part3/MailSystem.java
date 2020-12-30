@@ -12,7 +12,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class MailSystem {
-    //fer hashmap user-mailbox
     private MailStore mailStore;
     private List<User> userList;
     private Map<String, Mailbox> mapUsers;
@@ -23,7 +22,7 @@ public class MailSystem {
     public MailSystem(MailStoreFactory mailStoreFactory) {
         this.mailStore = mailStoreFactory.createMailStore();
         this.userList = new ArrayList<>();
-        this.mapUsers = new HashMap<String, Mailbox>();
+        this.mapUsers = new HashMap<>();
     }
 
     public Mailbox createNewUser(String username, String name, int yearBirth) {
@@ -41,22 +40,19 @@ public class MailSystem {
 
     }
 
-    public Map<String, Mailbox> getAllMailboxes() { return mapUsers; }
+    public Map<String, Mailbox> getAllMailboxes() {
+        return mapUsers;
+    }
 
     public List<User> getAllUsers() {
         return userList;
     }
 
     public List<Message> filterMessageGlobally(Predicate<Message> predicate) {
-        //predicate= m -> m.getSender().equals("Lluis") && m.getBody().startsWith("Hola") ;
-
-
-        List<Message> filterList = getAllMessages()
+        return getAllMessages()
                 .stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
-
-        return filterList;
     }
 
     public int countTotalMessages() {
@@ -103,12 +99,12 @@ public class MailSystem {
 
     public void changeMailStore() {
         if (mailStore instanceof MemoryMailStore) {
-            FileWriter myWriter = null;
+            FileWriter myWriter;
 
             try {
                 List<Message> msg = mailStore.getAllMessages();
                 myWriter = new FileWriter("messages.txt", true);
-                for(Message m : msg)
+                for (Message m : msg)
                     myWriter.write(m.toStringFile());
                 myWriter.close();
             } catch (IOException e) {

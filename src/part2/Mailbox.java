@@ -1,4 +1,9 @@
-package part1;
+package part2;
+
+import part1.Message;
+import part1.User;
+import part1.UserMailingOperations;
+import part1.MailStore;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,16 +12,30 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Mailbox implements UserMailingOperations {
-    private User account;
-    private List<Message> messages = new ArrayList<>();
-    private MailStore mailStore;
 
-    public Mailbox() {
-    }
+    private final User account;
+    private List<Message> messages = new ArrayList<>();
+    private final MailStore mailStore;
+    private final List<MailboxFilter> observers = new ArrayList<>();
+    private final List<Message> spamList = new ArrayList<>();
 
     public Mailbox(User account, MailStore mailStore) {
         this.account = account;
         this.mailStore = mailStore;
+    }
+
+    public List<Message> listSpamMail() {
+        return spamList;
+    }
+
+    public void attach(MailboxFilter observer) {
+        observers.add(observer);
+    }
+
+    public void notifyAllObservers() {
+        for (MailboxFilter observer : observers) {
+            spamList.addAll(observer.update(messages));
+        }
     }
 
     @Override
@@ -26,6 +45,7 @@ public class Mailbox implements UserMailingOperations {
         messages.sort((o1, o2) -> o2.getSentTime().compareTo(o1.getSentTime()));
 
         messages.sort(Comparator.comparing(Message::getSentTime).reversed());
+        notifyAllObservers();
     }
 
     @Override

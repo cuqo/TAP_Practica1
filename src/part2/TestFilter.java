@@ -1,12 +1,7 @@
 package part2;
 
 import part1.*;
-
-import java.time.Period;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class TestFilter {
 
@@ -15,9 +10,9 @@ public class TestFilter {
         MailSystem mailSystem = new MailSystem(new MemoryMailStore());
 
         //2. Create at least 3 users, two have the same name but different username.
-        MailboxPart2 mailbox1 = mailSystem.createNewUser("user1", "Joan", 2000);
-        MailboxPart2 mailbox2 = mailSystem.createNewUser("user2", "Joan", 2005);
-        MailboxPart2 mailbox3 = mailSystem.createNewUser("user3spam", "Maria", 1999);
+        Mailbox mailbox1 = mailSystem.createNewUser("user1", "Joan", 2000);
+        Mailbox mailbox2 = mailSystem.createNewUser("user2", "Joan", 2005);
+        Mailbox mailbox3 = mailSystem.createNewUser("user3spam", "Maria", 1999);
 
         //3. Then, use the mailboxes to send a few emails between them. Make some of them share the same subject and make enough so that the following tests have results
         mailbox2.sendMail("user1", "hola Joan", "Hola que tal?");
@@ -65,12 +60,7 @@ public class TestFilter {
 
         //7. Using streams, obtain the users that have sent any message that got filtered as spam
         System.out.println("********* SPAM USERS *********");
-        msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-            @Override
-            public boolean test(Message message) {
-                return message.getBody().toCharArray().length > 20 || message.getSender().contains("spam");
-            }
-        });
+        msg = mailSystem.filterMessageGlobally(message -> message.getBody().toCharArray().length > 20 || message.getSender().contains("spam"));
         msg.forEach(message -> System.out.println(message.getSender()));
     }
 }

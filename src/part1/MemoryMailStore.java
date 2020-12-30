@@ -9,19 +9,19 @@ import java.util.List;
         store = "part1.MemoryMailStore",
         log = true
 )
-public class MemoryMailStore extends MailStore{
+public class MemoryMailStore implements MailStore {
 
-    private List<Message> mailList = new ArrayList();
+    private List<Message> mailList = new ArrayList<>();
 
     @Override
     public void sendMail(Message msg) {
         mailList.add(msg);
     }
 
-    public List getMail(String username){
-        List<Message> messages = new ArrayList();
+    public List<Message> getMail(String username) {
+        List<Message> messages = new ArrayList<>();
 
-        for (Message message : mailList){
+        for (Message message : mailList) {
             if (message.getReceiver().equals(username))
                 messages.add(message);
         }

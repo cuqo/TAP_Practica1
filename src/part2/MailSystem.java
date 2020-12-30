@@ -1,8 +1,6 @@
 package part2;
 
-
 import part1.*;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,10 +11,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class MailSystem {
-    //fer hashmap user-mailbox
     private MailStore mailStore;
     private List<User> userList;
-    private Map<String, MailboxPart2> mapUsers;
+    private Map<String, Mailbox> mapUsers;
 
     public MailSystem() {
     }
@@ -27,9 +24,9 @@ public class MailSystem {
         this.mapUsers = new HashMap<>();
     }
 
-    public MailboxPart2 createNewUser(String username, String name, int yearBirth) {
+    public Mailbox createNewUser(String username, String name, int yearBirth) {
         User user = new User(username, name, yearBirth);
-        MailboxPart2 mailbox = new MailboxPart2(user, mailStore);
+        Mailbox mailbox = new Mailbox(user, mailStore);
         mailbox.attach(new SpamUserFilter());
         mailbox.attach(new TooLongFilter());
 
@@ -44,16 +41,15 @@ public class MailSystem {
 
     }
 
-    public Map<String, MailboxPart2> getAllMailboxes() { return mapUsers; }
+    public Map<String, Mailbox> getAllMailboxes() {
+        return mapUsers;
+    }
 
     public List<User> getAllUsers() {
         return userList;
     }
 
     public List<Message> filterMessageGlobally(Predicate<Message> predicate) {
-        //predicate= m -> m.getSender().equals("Lluis") && m.getBody().startsWith("Hola") ;
-
-
         return getAllMessages()
                 .stream()
                 .filter(predicate)
@@ -109,7 +105,7 @@ public class MailSystem {
             try {
                 List<Message> msg = mailStore.getAllMessages();
                 myWriter = new FileWriter("messages.txt", true);
-                for(Message m : msg)
+                for (Message m : msg)
                     myWriter.write(m.toStringFile());
                 myWriter.close();
             } catch (IOException e) {

@@ -1,18 +1,17 @@
 package part1;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class CLI {
-    public static void main(String[] args) {
-        MailSystem mailSystem = new MailSystem(new MemoryMailStore());
-        cliOperations(mailSystem);
+
+    private final MailSystem mailSystem;
+
+    public CLI(MailSystem mailSystem) {
+        this.mailSystem = mailSystem;
     }
 
-    public static void cliOperations(MailSystem mailSystem) {
+    public void cliOperations() {
         Scanner teclat = new Scanner(System.in);
         String line = "";
         while (!line.equals("exit")) {
@@ -29,21 +28,11 @@ public class CLI {
                     List<Message> msg;
                     switch (lineSplit[1]) {
                         case "contains":
-                            msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getSubject().contains(lineSplit[2]) || message.getBody().contains(lineSplit[2]);
-                                }
-                            });
+                            msg = mailSystem.filterMessageGlobally(message -> message.getSubject().contains(lineSplit[2]) || message.getBody().contains(lineSplit[2]));
                             msg.forEach(System.out::println);
                             break;
                         case "lessthan":
-                            msg = mailSystem.filterMessageGlobally(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getBody().split(" ").length < Integer.parseInt(lineSplit[2]);
-                                }
-                            });
+                            msg = mailSystem.filterMessageGlobally(message -> message.getBody().split(" ").length < Integer.parseInt(lineSplit[2]));
                             msg.forEach(System.out::println);
                             break;
                     }
@@ -65,7 +54,7 @@ public class CLI {
         }
     }
 
-    public static void cliUser(Mailbox mailbox, String username) {
+    public void cliUser(Mailbox mailbox, String username) {
         Scanner teclat = new Scanner(System.in);
         String line = "";
         List<Message> msg;
@@ -93,21 +82,11 @@ public class CLI {
                 case "filter":
                     switch (lineSplit[1]) {
                         case "contains":
-                            msg = mailbox.filterUserMail(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getSubject().contains(lineSplit[2]) || message.getBody().contains(lineSplit[2]);
-                                }
-                            });
+                            msg = mailbox.filterUserMail(message -> message.getSubject().contains(lineSplit[2]) || message.getBody().contains(lineSplit[2]));
                             msg.forEach(System.out::println);
                             break;
                         case "lessthan":
-                            msg = mailbox.filterUserMail(new Predicate<Message>() {
-                                @Override
-                                public boolean test(Message message) {
-                                    return message.getBody().split(" ").length < Integer.parseInt(lineSplit[2]);
-                                }
-                            });
+                            msg = mailbox.filterUserMail(message -> message.getBody().split(" ").length < Integer.parseInt(lineSplit[2]));
                             msg.forEach(System.out::println);
                             break;
                     }
@@ -121,7 +100,7 @@ public class CLI {
         }
     }
 
-    public static void menuCLI() {
+    public void menuCLI() {
         System.out.println("***********************************************");
         System.out.println("*- createuser <username> <name> <birthYear>   *");
         System.out.println("*- filter <contains> <word> / <lessthan> <n>  *");
@@ -130,7 +109,7 @@ public class CLI {
         System.out.println("***********************************************");
     }
 
-    public static void menuUserCLI() {
+    public void menuUserCLI() {
         System.out.println("*****************************************************************");
         System.out.println("*- send <to> \"subject\" \"body\"                                   *");
         System.out.println("*- update                                                       *");

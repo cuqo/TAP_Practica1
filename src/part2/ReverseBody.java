@@ -1,9 +1,5 @@
 package part2;
 
-import part1.Message;
-
-import java.util.List;
-
 public class ReverseBody implements Strategy {
     @Override
     public String sendMail(String body) {

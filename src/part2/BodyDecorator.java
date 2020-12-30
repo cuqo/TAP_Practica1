@@ -1,17 +1,15 @@
 package part2;
 
-
-
-import part1.MailStore;
 import part1.Message;
+import part1.MailStore;
 
 import java.util.List;
 
-public class BodyDecorator extends MailStore {
+public class BodyDecorator implements MailStore {
 
-    private MailStore mailStore;
-    private Context context1;
-    private Context context2;
+    private final MailStore mailStore;
+    private final Context context1;
+    private final Context context2;
 
     public BodyDecorator(MailStore mailStore, Context context1, Context context2) {
         this.mailStore = mailStore;
@@ -49,6 +47,5 @@ public class BodyDecorator extends MailStore {
         });
 
         return msgList;
-        /*return mailStore.getAllMessages();*/
     }
 }

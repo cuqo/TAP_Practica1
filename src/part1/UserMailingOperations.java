@@ -5,9 +5,13 @@ import java.util.function.Predicate;
 
 public interface UserMailingOperations {
 
-    public void updateMail();
-    public List<Message> listMail();
-    public void sendMail(String destination, String subject, String body);
-    public List<Message> listSortedMail(String cond);
-    public List<Message> filterUserMail(Predicate<Message> predicate);
+    void updateMail();
+
+    List<Message> listMail();
+
+    void sendMail(String destination, String subject, String body);
+
+    List<Message> listSortedMail(String cond);
+
+    List<Message> filterUserMail(Predicate<Message> predicate);
 }

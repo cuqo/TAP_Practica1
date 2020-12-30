@@ -1,16 +1,12 @@
 package part1;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 public class Message {
-    private String sender;
-    private String receiver;
-    private Date sentTime;
-    private String subject;
+    private final String sender;
+    private final String receiver;
+    private final Date sentTime;
+    private final String subject;
     private String body;
 
     public Message(String sender, String receiver, String subject, String body) {

@@ -1,10 +1,9 @@
 package part4;
 
-import part1.MailStore;
-import part1.User;
-import part1.Mailbox;
-import part1.Message;
+import part1.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class MailSystem {
     private MailStore mailStore;
-    private List<User> userList;
-    private Map<String, Mailbox> mapUsers;
+    private final List<User> userList;
+    private final Map<String, Mailbox> mapUsers;
 
     public MailSystem() {
         this.userList = new ArrayList<>();
-        this.mapUsers = new HashMap<String, Mailbox>();
+        this.mapUsers = new HashMap<>();
     }
 
     public Mailbox createNewUser(String username, String name, int yearBirth) {
@@ -46,15 +45,10 @@ public class MailSystem {
     }
 
     public List<Message> filterMessageGlobally(Predicate<Message> predicate) {
-        //predicate= m -> m.getSender().equals("Lluis") && m.getBody().startsWith("Hola") ;
-
-
-        List<Message> filterList = getAllMessages()
+        return getAllMessages()
                 .stream()
                 .filter(predicate)
                 .collect(Collectors.toList());
-
-        return filterList;
     }
 
     public int countTotalMessages() {
@@ -102,15 +96,15 @@ public class MailSystem {
     public void readMailStore(Config config) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class mailStoreType = Class.forName(config.store());
         Object newMailStore = mailStoreType.newInstance();
-        mailStore = (MailStore) newMailStore;
-
-        System.out.println(config.store());
-        System.out.println(config.log());
+        if (config.log())
+            mailStore = (MailStore) Log.newInstance(newMailStore);
+        else
+            mailStore = (MailStore) newMailStore;
     }
 
-    /* public void changeMailStore() {
+    public void changeMailStore() {
         if (mailStore instanceof MemoryMailStore) {
-            FileWriter myWriter = null;
+            FileWriter myWriter;
 
             try {
                 List<Message> msg = mailStore.getAllMessages();
@@ -129,6 +123,6 @@ public class MailSystem {
             mailStore = new MemoryMailStore();
             ((MemoryMailStore) mailStore).setMailList(aux);
         }
-    } */
+    }
 
 }
