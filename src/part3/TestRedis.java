@@ -3,6 +3,7 @@ package part3;
 import part1.Mailbox;
 import part1.Message;
 import part1.User;
+import part1.MailSystem;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,8 @@ import java.util.stream.Collectors;
 public class TestRedis {
     public static void main(String[] args) {
 
-        MailSystem mailSystem = new MailSystem(new RedisMailStoreFactory());
+        Redis redis = Redis.getInstance();
+        MailSystem mailSystem = new MailSystem(new RedisMailStore(redis));
 
         Mailbox mailbox1 = mailSystem.createNewUser("user1", "Joan", 2000);
         Mailbox mailbox2 = mailSystem.createNewUser("user2", "Joan", 2005);

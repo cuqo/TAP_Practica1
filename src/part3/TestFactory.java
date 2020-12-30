@@ -16,7 +16,7 @@ public class TestFactory {
         List<MailStoreFactory> factoriesList = new ArrayList<>();
         factoriesList.add(new MemoryMailStoreFactory());
         factoriesList.add(new FileMailStoreFactory());
-        /*factoriesList.add(new RedisMailStoreFactory());*/
+        factoriesList.add(new RedisMailStoreFactory());
 
         factoriesList.forEach(mailStoreFactory -> {
             MailSystem mailSystem = new MailSystem(mailStoreFactory);
