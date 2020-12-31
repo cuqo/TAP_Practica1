@@ -25,13 +25,15 @@ object MailSys extends scala.App {
   etse.addChild(user3)
   estudiants.addChild(user4)
 
-  println(urv.name)
-  println(estudiants.name)
-
   cat.printTree("")
-  root.getUsers()
 
-  val mailbox1 = mailSystem.createNewUser("user1", "user1", 1990);
-  val mailbox2 = mailSystem.createNewUser("user2", "user2", 1999);
+  user1.mailbox.sendMail("user2", "hello", "Hello user2, this is user1!")
+  user1.mailbox.sendMail("user1", "hello", "Hello user1, this is you!")
+  user1.mailbox.sendMail("user4", "greetings", "Regards")
+  user1.mailbox.sendMail("user3", "spam", "spam spam")
+  user2.mailbox.sendMail("user1", "spam", "spam spam")
+
+  user1.getMail().foreach(msg => msg.toString)
+
 
 }

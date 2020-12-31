@@ -11,10 +11,12 @@ trait AComponent {
 
 class Account(val username: String) extends AComponent {
   override def name = username
+  var mailbox:Mailbox = new Mailbox()
 
-  def getMail(mailStore: MailStore): List[Message] = {
-    mailStore.getMail(name).asScala.toList
+  def getMail(): List[Message] = {
+    mailbox.listMail().asScala.toList
   }
+
 }
 
 class Domain(val domain: String) extends AComponent {
@@ -42,17 +44,22 @@ class Domain(val domain: String) extends AComponent {
     })
   }
 
-  def getMail(): List[Message] = {
-    println(getUsers())
-    return Nil
+  def getMail(): ListBuffer[Message] = {
+    val message:ListBuffer[Message] = new ListBuffer[Message]
+    val users:ListBuffer[Account] = new ListBuffer[Account]
+    getUsers(users)
+    users.foreach(account => {
+      message.addAll(account.getMail())
+    })
+    message
   }
 
-  def getUsers(): List[String] = {
+  def getUsers(users:ListBuffer[Account]): Unit = {
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
-      l.getUsers()
-      case l: Account => println(l.name)
+      l.getUsers(users)
+      case l: Account => /*println(l.name)*/
+        users.addOne(l)
     })
-    return Nil
   }
 }
