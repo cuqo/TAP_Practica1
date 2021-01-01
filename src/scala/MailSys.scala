@@ -26,6 +26,10 @@ object MailSys extends scala.App {
   estudiants.addChild(user4)
 
   cat.printTree("")
+  user1.mailbox = mailSystem.createNewUser("user1", "Joan", 2000)
+  user2.mailbox = mailSystem.createNewUser("user2", "Joan", 2005)
+  user3.mailbox = mailSystem.createNewUser("user3", "Maria", 1999)
+  user4.mailbox = mailSystem.createNewUser("user4", "Laura", 1990)
 
   user1.mailbox.sendMail("user2", "hello", "Hello user2, this is user1!")
   user1.mailbox.sendMail("user1", "hello", "Hello user1, this is you!")
@@ -33,7 +37,19 @@ object MailSys extends scala.App {
   user1.mailbox.sendMail("user3", "spam", "spam spam")
   user2.mailbox.sendMail("user1", "spam", "spam spam")
 
-  user1.getMail().foreach(msg => msg.toString)
+  //user1.getMail().foreach(msg => println(msg))
+  //estudiants.getMail().foreach(msg => println(msg))
+  println("All mail: " + root.getMail)
 
+  val v = new FilterVisitor(m => !m.getBody.contains("spam"))
+  root.accept(v)
+  println("Filtered: " + v.messages)
 
+  val c = new CounterVisitor()
+  root.accept(c)
+  println("Users: " + c.users + " Domains: " + c.domains)
+
+  val f = new FoldFilterVisitor[Int](0, (acc, m) => acc + m.getBody.length, account => account.username.contains("user"))
+  root.accept(f)
+  println("Character count per user: " + f.users)
 }

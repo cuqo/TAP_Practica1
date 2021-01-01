@@ -7,19 +7,30 @@ import scala.jdk.CollectionConverters._
 
 trait AComponent {
   def name: String
+  def accept: Unit
 }
 
 class Account(val username: String) extends AComponent {
   override def name = username
-  var mailbox:Mailbox = new Mailbox()
+  override def accept: Unit = {}
+
+
+  var mailbox:Mailbox = null
 
   def getMail(): List[Message] = {
+    mailbox.updateMail()
     mailbox.listMail().asScala.toList
+  }
+
+  def accept(visitorInterface: VisitorInterface): Unit = {
+    visitorInterface.visit(this)
   }
 
 }
 
 class Domain(val domain: String) extends AComponent {
+  override def accept: Unit = {}
+
   var childrenDomain: ListBuffer[AComponent] = new ListBuffer[AComponent]()
 
   def addChild(child: AComponent): Unit = {
@@ -32,8 +43,9 @@ class Domain(val domain: String) extends AComponent {
 
   override def name = domain
 
-  def printTree(c: String): Unit = {
+  def printTree( c: String): Unit = {
     println(c + "|" + name)
+
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
         val tab = c + "|\t";
@@ -58,8 +70,12 @@ class Domain(val domain: String) extends AComponent {
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
       l.getUsers(users)
-      case l: Account => /*println(l.name)*/
+      case l: Account =>
         users.addOne(l)
     })
+  }
+
+  def accept(visitorInterface: VisitorInterface): Unit = {
+    visitorInterface.visit(this)
   }
 }
