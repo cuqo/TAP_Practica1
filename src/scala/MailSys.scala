@@ -51,15 +51,15 @@ object MailSys extends scala.App {
   root.accept(f)
   println("Character count per user: " + f.users)
 
-  user1.getMail().foreach(m => println(m))
+  user1.getMail.foreach(m => println(m))
   println("*******************************************************************************************************")
 
   val censoredList:List[String] = List("spam", "you")
-  val list = user1.stackCensore(censoredList)(user1.getMail())
+  val list = user1.stackCensore(censoredList)(user1.getMail)
   list.foreach(m => println(m))
   println("*******************************************************************************************************")
 
-  val list2 = user1.tailCensore(censoredList)(user1.getMail())
+  val list2 = user1.tailCensore(censoredList)(user1.getMail)
   list2.foreach(m => println(m))
 
   println("*******************************************************************************************************")

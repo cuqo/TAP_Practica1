@@ -19,7 +19,7 @@ class Account(val username: String) extends AComponent {
 
   var mailbox: Mailbox = null
 
-  def getMail(): List[Message] = {
+  def getMail: List[Message] = {
     mailbox.updateMail()
     mailbox.listMail().asScala.toList
   }
@@ -42,7 +42,7 @@ class Account(val username: String) extends AComponent {
         })
       })
       if (censore) {
-        val m: Message = new Message(messagesList.head.getSender, messagesList.head.getReceiver, messagesList.head.getSentTime, messagesList(0).getSubject, "CENSORED")
+        val m: Message = new Message(messagesList.head.getSender, messagesList.head.getReceiver, messagesList.head.getSentTime, messagesList.head.getSubject, "CENSORED")
         censoredMessageList.addOne(m)
       } else censoredMessageList.addOne(messagesList.head)
       messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList.head))
@@ -72,7 +72,6 @@ class Account(val username: String) extends AComponent {
         curryingTailMessage(c)
       }
     }
-
     curryingTailMessage(0)
     censoredMessageList.toList
   }
@@ -107,23 +106,24 @@ class Domain(val domain: String) extends AComponent {
     })
   }
 
-  def getMail(): ListBuffer[Message] = {
+  def getMail: ListBuffer[Message] = {
     val message: ListBuffer[Message] = new ListBuffer[Message]
-    val users: ListBuffer[Account] = new ListBuffer[Account]
-    getUsers(users)
+    val users: ListBuffer[Account] = getUsers
     users.foreach(account => {
-      message.addAll(account.getMail())
+      message.addAll(account.getMail)
     })
     message
   }
 
-  def getUsers(users: ListBuffer[Account]): Unit = {
+  def getUsers: ListBuffer[Account] = {
+    val users: ListBuffer[Account] = new ListBuffer[Account]
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
-        l.getUsers(users)
+        users.addAll(l.getUsers)
       case l: Account =>
         users.addOne(l)
     })
+    users
   }
 
   def accept(visitorInterface: VisitorInterface): Unit = {

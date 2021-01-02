@@ -22,8 +22,8 @@ class FilterVisitor(predicate: Predicate[Message]) extends VisitorInterface {
 
   override def visit(domain: Domain): Unit = {
     val message:ListBuffer[Message] = new ListBuffer[Message]
-    val users:ListBuffer[Account] = new ListBuffer[Account]
-    domain.getUsers(users)
+    val users:ListBuffer[Account] = domain.getUsers
+
     users.foreach(account => {
       message.addAll(account.mailbox.filterUserMail(predicate).asScala.toList)
     })
@@ -54,7 +54,7 @@ class FoldFilterVisitor[A](acc:A, op: (A, Message) => A, predCond: Predicate[Acc
   var users:Map[String, A] = Map()
 
   override def visit(account: Account): Unit = {
-    val list:List[Message] = account.getMail()
+    val list:List[Message] = account.getMail
     users+=(account.username -> list.foldLeft(acc)(op))
   }
 
@@ -75,7 +75,7 @@ class TransformerVisitor(censoredList:List[String]) extends VisitorInterface {
 
   override def visit(account: Account): Unit = {
     /*messages.addAll(account.tailCensore(censoredList)(account.getMail()))*/
-    messages.addAll(account.stackCensore(censoredList)(account.getMail()))
+    messages.addAll(account.stackCensore(censoredList)(account.getMail))
   }
 
   override def visit(domain: Domain): Unit = {
