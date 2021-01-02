@@ -1,8 +1,9 @@
 package scala
 
 import part1.Message
-
 import java.util.function.Predicate
+
+import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
@@ -70,21 +71,16 @@ class FoldFilterVisitor[A](acc:A, op: (A, Message) => A, predCond: Predicate[Acc
   }
 }
 
-class TransformerVisitor(censoredList:List[String]) extends VisitorInterface {
+class TransformerVisitor(op: List[Message] => List[Message]) extends VisitorInterface {
   var messages: ListBuffer[Message] = ListBuffer[Message]()
-
+  var m:List[Message] = List()
   override def visit(account: Account): Unit = {
-    /*messages.addAll(account.tailCensore(censoredList)(account.getMail()))*/
-    messages.addAll(account.stackCensore(censoredList)(account.getMail))
+    m = op(Nil)
+    messages.addAll(m)
   }
 
   override def visit(domain: Domain): Unit = {
-    domain.childrenDomain.foreach(pos => pos match {
-      case l: Domain =>
-        visit(l)
-      case l: Account =>
-        visit(l)
-    })
+    m = op(Nil)
+    messages.addAll(m)
   }
-
 }

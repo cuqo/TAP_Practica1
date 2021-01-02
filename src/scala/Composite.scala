@@ -27,55 +27,6 @@ class Account(val username: String) extends AComponent {
   def accept(visitorInterface: VisitorInterface): Unit = {
     visitorInterface.visit(this)
   }
-
-  def stackCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
-    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
-    var messagesListRecursive:List[Message] = Nil
-
-    if (messagesList.nonEmpty) {
-      var censore: Boolean = false
-      censoredList.foreach(str => {
-        messagesList.head.getBody.split(" ").foreach(strBody => {
-          if (strBody.contains(str)) {
-            censore = true
-          }
-        })
-      })
-      if (censore) {
-        val m: Message = new Message(messagesList.head.getSender, messagesList.head.getReceiver, messagesList.head.getSentTime, messagesList.head.getSubject, "CENSORED")
-        censoredMessageList.addOne(m)
-      } else censoredMessageList.addOne(messagesList.head)
-      messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList.head))
-      censoredMessageList.appendAll(stackCensore(censoredList)(messagesListRecursive))
-    }
-    censoredMessageList.toList
-  }
-
-  def tailCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
-    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
-
-    @tailrec def curryingTailMessage(count: Int): Unit = {
-      if (count < messagesList.size) {
-        var censore: Boolean = false
-        censoredList.foreach(str => {
-          messagesList(count).getBody.split(" ").foreach(strBody => {
-            if (strBody.contains(str)) {
-              censore = true
-            }
-          })
-        })
-        if (censore) {
-          val m: Message = new Message(messagesList(count).getSender, messagesList(count).getReceiver, messagesList(count).getSentTime, messagesList(count).getSubject, "CENSORED")
-          censoredMessageList.addOne(m)
-        } else censoredMessageList.addOne(messagesList(count))
-        val c = count + 1
-        curryingTailMessage(c)
-      }
-    }
-    curryingTailMessage(0)
-    censoredMessageList.toList
-  }
-
 }
 
 class Domain(val domain: String) extends AComponent {

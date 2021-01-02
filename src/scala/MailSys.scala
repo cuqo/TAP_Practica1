@@ -1,6 +1,9 @@
 package scala
 
-import part1.{MailSystem, MemoryMailStore}
+import part1.{MailSystem, MemoryMailStore, Message}
+
+import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 
 object MailSys extends scala.App {
   val mailStore = new MemoryMailStore()
@@ -37,36 +40,66 @@ object MailSys extends scala.App {
   user1.mailbox.sendMail("user3", "spam", "spam spam")
   user2.mailbox.sendMail("user1", "spam", "spam spam")
 
-  println("All mail: " + root.getMail)
+  println("\nAll mail: " + root.getMail)
 
   val v = new FilterVisitor(m => !m.getBody.contains("spam"))
   root.accept(v)
-  println("Filtered: " + v.messages)
+  println("\nFiltered: " + v.messages)
 
   val c = new CounterVisitor()
   root.accept(c)
-  println("Users: " + c.users + " Domains: " + c.domains)
+  println("\nUsers: " + c.users + " Domains: " + c.domains)
 
   val f = new FoldFilterVisitor[Int](0, (acc, m) => acc + m.getBody.length, account => account.username.contains("user"))
   root.accept(f)
-  println("Character count per user: " + f.users)
+  println("\nCharacter count per user: " + f.users)
 
-  user1.getMail.foreach(m => println(m))
-  println("*******************************************************************************************************")
-
-  val censoredList:List[String] = List("spam", "you")
-  val list = user1.stackCensore(censoredList)(user1.getMail)
-  list.foreach(m => println(m))
-  println("*******************************************************************************************************")
-
-  val list2 = user1.tailCensore(censoredList)(user1.getMail)
-  list2.foreach(m => println(m))
-
-  println("*******************************************************************************************************")
-  val t = new TransformerVisitor(censoredList)
+  val t = new TransformerVisitor(m => stackCensore(List("spam", "you"))(root.getMail.toList))
   root.accept(t)
-  println("Censored list: " + t.messages)
-  t.messages.foreach(m => println(m))
+  println("\nCensored domain: " + t.messages)
 
+  val z = new TransformerVisitor(m => tailCensore(List("spam"))(user1.getMail))
+  user1.accept(z)
+  println("\nCensored user: " + z.messages)
 
+  def stackCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
+    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
+    var messagesListRecursive:List[Message] = Nil
+
+    if (messagesList.nonEmpty) {
+      censoredMessageList.addOne(containsSpamWord(censoredList)(messagesList.head))
+      messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList.head))
+      censoredMessageList.appendAll(stackCensore(censoredList)(messagesListRecursive))
+    }
+    censoredMessageList.toList
+  }
+
+  def tailCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
+    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
+
+    @tailrec def curryingTailMessage(count: Int): Unit = {
+      if (count < messagesList.size) {
+        censoredMessageList.addOne(containsSpamWord(censoredList)(messagesList(count)))
+        val c = count + 1
+        curryingTailMessage(c)
+      }
+    }
+    curryingTailMessage(0)
+    censoredMessageList.toList
+  }
+
+  def containsSpamWord(censoredList:List[String])(message: Message): Message = {
+    var censore: Boolean = false
+    censoredList.foreach(str => {
+      message.getBody.split(" ").foreach(strBody => {
+        if (strBody.contains(str)) {
+          censore = true
+        }
+      })
+    })
+    if (censore) {
+      val m: Message = new Message(message.getSender, message.getReceiver, message.getSentTime, message.getSubject, "CENSORED")
+      m
+    } else message
+  }
 }
