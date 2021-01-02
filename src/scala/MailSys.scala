@@ -37,8 +37,6 @@ object MailSys extends scala.App {
   user1.mailbox.sendMail("user3", "spam", "spam spam")
   user2.mailbox.sendMail("user1", "spam", "spam spam")
 
-  //user1.getMail().foreach(msg => println(msg))
-  //estudiants.getMail().foreach(msg => println(msg))
   println("All mail: " + root.getMail)
 
   val v = new FilterVisitor(m => !m.getBody.contains("spam"))
@@ -52,4 +50,23 @@ object MailSys extends scala.App {
   val f = new FoldFilterVisitor[Int](0, (acc, m) => acc + m.getBody.length, account => account.username.contains("user"))
   root.accept(f)
   println("Character count per user: " + f.users)
+
+  user1.getMail().foreach(m => println(m))
+  println("*******************************************************************************************************")
+
+  val censoredList:List[String] = List("spam", "you")
+  val list = user1.stackCensore(censoredList)(user1.getMail())
+  list.foreach(m => println(m))
+  println("*******************************************************************************************************")
+
+  val list2 = user1.tailCensore(censoredList)(user1.getMail())
+  list2.foreach(m => println(m))
+
+  println("*******************************************************************************************************")
+  val t = new TransformerVisitor(censoredList)
+  root.accept(t)
+  println("Censored list: " + t.messages)
+  t.messages.foreach(m => println(m))
+
+
 }

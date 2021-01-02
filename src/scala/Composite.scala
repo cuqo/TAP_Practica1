@@ -1,21 +1,24 @@
 package scala
 
-import part1.{MailStore, MailSystem, Mailbox, Message}
+import part1.{Mailbox, Message}
 
+import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
 trait AComponent {
   def name: String
-  def accept: Unit
+
+  /*def accept: Unit*/
 }
 
 class Account(val username: String) extends AComponent {
   override def name = username
-  override def accept: Unit = {}
+
+  /*override def accept: Unit = {}*/
 
 
-  var mailbox:Mailbox = null
+  var mailbox: Mailbox = null
 
   def getMail(): List[Message] = {
     mailbox.updateMail()
@@ -26,10 +29,59 @@ class Account(val username: String) extends AComponent {
     visitorInterface.visit(this)
   }
 
+  def stackCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
+    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
+    var messagesListRecursive:List[Message] = Nil
+
+    if (messagesList.size > 0) {
+      var censore: Boolean = false
+      censoredList.foreach(str => {
+        messagesList(0).getBody.split(" ").foreach(strBody => {
+          if (strBody.contains(str)) {
+            censore = true
+          }
+        })
+      })
+      if (censore) {
+        val m: Message = new Message(messagesList(0).getSender, messagesList(0).getReceiver, messagesList(0).getSentTime, messagesList(0).getSubject, "CENSORED")
+        censoredMessageList.addOne(m)
+      } else censoredMessageList.addOne(messagesList(0))
+      messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList(0)))
+      censoredMessageList.appendAll(stackCensore(censoredList)(messagesListRecursive))
+    }
+    censoredMessageList.toList
+  }
+
+  def tailCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
+    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
+
+    @tailrec def curryingTailMessage(count: Int): Unit = {
+      if (count < messagesList.size) {
+        var censore: Boolean = false
+        censoredList.foreach(str => {
+          messagesList(count).getBody.split(" ").foreach(strBody => {
+            if (strBody.contains(str)) {
+              censore = true
+            }
+          })
+        })
+        if (censore) {
+          val m: Message = new Message(messagesList(count).getSender, messagesList(count).getReceiver, messagesList(count).getSentTime, messagesList(count).getSubject, "CENSORED")
+          censoredMessageList.addOne(m)
+        } else censoredMessageList.addOne(messagesList(count))
+        val c = count + 1
+        curryingTailMessage(c)
+      }
+    }
+
+    curryingTailMessage(0)
+    censoredMessageList.toList
+  }
+
 }
 
 class Domain(val domain: String) extends AComponent {
-  override def accept: Unit = {}
+  /*override def accept: Unit = {}*/
 
   var childrenDomain: ListBuffer[AComponent] = new ListBuffer[AComponent]()
 
@@ -43,7 +95,7 @@ class Domain(val domain: String) extends AComponent {
 
   override def name = domain
 
-  def printTree( c: String): Unit = {
+  def printTree(c: String): Unit = {
     println(c + "|" + name)
 
     childrenDomain.foreach(pos => pos match {
@@ -57,8 +109,8 @@ class Domain(val domain: String) extends AComponent {
   }
 
   def getMail(): ListBuffer[Message] = {
-    val message:ListBuffer[Message] = new ListBuffer[Message]
-    val users:ListBuffer[Account] = new ListBuffer[Account]
+    val message: ListBuffer[Message] = new ListBuffer[Message]
+    val users: ListBuffer[Account] = new ListBuffer[Account]
     getUsers(users)
     users.foreach(account => {
       message.addAll(account.getMail())
@@ -66,10 +118,10 @@ class Domain(val domain: String) extends AComponent {
     message
   }
 
-  def getUsers(users:ListBuffer[Account]): Unit = {
+  def getUsers(users: ListBuffer[Account]): Unit = {
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
-      l.getUsers(users)
+        l.getUsers(users)
       case l: Account =>
         users.addOne(l)
     })

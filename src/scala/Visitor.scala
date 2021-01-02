@@ -13,7 +13,6 @@ abstract class VisitorInterface {
   def visit(domain: Domain): Unit
 }
 
-//TO-DO visitor pattern
 class FilterVisitor(predicate: Predicate[Message]) extends VisitorInterface {
   var messages: ListBuffer[Message] = ListBuffer[Message]()
 
@@ -51,7 +50,7 @@ class CounterVisitor() extends VisitorInterface {
   }
 }
 
-class FoldFilterVisitor[A](acc:A, op: ((A, Message) => A), predCond: Predicate[Account]) extends VisitorInterface {
+class FoldFilterVisitor[A](acc:A, op: (A, Message) => A, predCond: Predicate[Account]) extends VisitorInterface {
   var users:Map[String, A] = Map()
 
   override def visit(account: Account): Unit = {
@@ -69,4 +68,23 @@ class FoldFilterVisitor[A](acc:A, op: ((A, Message) => A), predCond: Predicate[A
         }
     })
   }
+}
+
+class TransformerVisitor(censoredList:List[String]) extends VisitorInterface {
+  var messages: ListBuffer[Message] = ListBuffer[Message]()
+
+  override def visit(account: Account): Unit = {
+    /*messages.addAll(account.tailCensore(censoredList)(account.getMail()))*/
+    messages.addAll(account.stackCensore(censoredList)(account.getMail()))
+  }
+
+  override def visit(domain: Domain): Unit = {
+    domain.childrenDomain.foreach(pos => pos match {
+      case l: Domain =>
+        visit(l)
+      case l: Account =>
+        visit(l)
+    })
+  }
+
 }
