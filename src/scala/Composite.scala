@@ -13,10 +13,9 @@ trait AComponent {
 }
 
 class Account(val username: String) extends AComponent {
-  override def name = username
+  override def name: String = username
 
   /*override def accept: Unit = {}*/
-
 
   var mailbox: Mailbox = null
 
@@ -33,20 +32,20 @@ class Account(val username: String) extends AComponent {
     val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
     var messagesListRecursive:List[Message] = Nil
 
-    if (messagesList.size > 0) {
+    if (messagesList.nonEmpty) {
       var censore: Boolean = false
       censoredList.foreach(str => {
-        messagesList(0).getBody.split(" ").foreach(strBody => {
+        messagesList.head.getBody.split(" ").foreach(strBody => {
           if (strBody.contains(str)) {
             censore = true
           }
         })
       })
       if (censore) {
-        val m: Message = new Message(messagesList(0).getSender, messagesList(0).getReceiver, messagesList(0).getSentTime, messagesList(0).getSubject, "CENSORED")
+        val m: Message = new Message(messagesList.head.getSender, messagesList.head.getReceiver, messagesList.head.getSentTime, messagesList(0).getSubject, "CENSORED")
         censoredMessageList.addOne(m)
-      } else censoredMessageList.addOne(messagesList(0))
-      messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList(0)))
+      } else censoredMessageList.addOne(messagesList.head)
+      messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList.head))
       censoredMessageList.appendAll(stackCensore(censoredList)(messagesListRecursive))
     }
     censoredMessageList.toList
@@ -100,7 +99,7 @@ class Domain(val domain: String) extends AComponent {
 
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
-        val tab = c + "|\t";
+        val tab = c + "|\t"
         l.printTree(tab)
       case l: Account =>
         println(c + "|\t|@" + l.name)

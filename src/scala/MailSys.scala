@@ -1,10 +1,10 @@
 package scala
 
-import part1.{MailSystem, Message, MemoryMailStore}
+import part1.{MailSystem, MemoryMailStore}
 
 object MailSys extends scala.App {
-  val mailStore = new MemoryMailStore();
-  val mailSystem = new MailSystem(mailStore);
+  val mailStore = new MemoryMailStore()
+  val mailSystem = new MailSystem(mailStore)
 
   val root = new Domain("")
   val cat = new Domain("cat")
