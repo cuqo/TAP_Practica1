@@ -93,13 +93,16 @@ class Domain(val domain: String) extends AComponent {
 
   override def name = domain
 
-  def printTree(c: String): Unit = {
-    println(c + "|" + name)
+  def printTree: Unit = {
+    printTreeNode("")
+  }
 
+  def printTreeNode(c:String): Unit = {
+    println(c + "|" + name)
     childrenDomain.foreach(pos => pos match {
       case l: Domain =>
         val tab = c + "|\t"
-        l.printTree(tab)
+        l.printTreeNode(tab)
       case l: Account =>
         println(c + "|\t|@" + l.name)
       case _ =>

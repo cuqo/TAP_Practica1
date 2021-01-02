@@ -25,7 +25,7 @@ object MailSys extends scala.App {
   etse.addChild(user3)
   estudiants.addChild(user4)
 
-  cat.printTree("")
+  cat.printTree
   user1.mailbox = mailSystem.createNewUser("user1", "Joan", 2000)
   user2.mailbox = mailSystem.createNewUser("user2", "Joan", 2005)
   user3.mailbox = mailSystem.createNewUser("user3", "Maria", 1999)
