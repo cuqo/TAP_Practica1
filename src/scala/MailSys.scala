@@ -28,7 +28,8 @@ object MailSys extends scala.App {
   etse.addChild(user3)
   estudiants.addChild(user4)
 
-  cat.printTree
+  println("2- ")
+  cat.printTree()
   user1.mailbox = mailSystem.createNewUser("user1", "Joan", 2000)
   user2.mailbox = mailSystem.createNewUser("user2", "Joan", 2005)
   user3.mailbox = mailSystem.createNewUser("user3", "Maria", 1999)
@@ -40,31 +41,33 @@ object MailSys extends scala.App {
   user1.mailbox.sendMail("user3", "spam", "spam spam")
   user2.mailbox.sendMail("user1", "spam", "spam spam")
 
-  println("\nAll mail: " + root.getMail)
+  println("\n3- All mail: " + root.getMail)
 
   val v = new FilterVisitor(m => !m.getBody.contains("spam"))
   root.accept(v)
-  println("\nFiltered: " + v.messages)
+  println("\n5- Filtered: " + v.messages)
 
   val c = new CounterVisitor()
   root.accept(c)
-  println("\nUsers: " + c.users + " Domains: " + c.domains)
+  println("\n6- Users: " + c.users + " Domains: " + c.domains)
 
   val f = new FoldFilterVisitor[Int](0, (acc, m) => acc + m.getBody.length, account => account.username.contains("user"))
   root.accept(f)
-  println("\nCharacter count per user: " + f.users)
+  println("\n7- Character count per user: " + f.users)
 
-  val t = new TransformerVisitor(m => stackCensore(List("spam", "you"))(root.getMail.toList))
+  //TransformerVisitor with currying stack recursion
+  val t = new TransformerVisitor(m => stackCensore(List("spam", "you"))(m))
   root.accept(t)
-  println("\nCensored domain: " + t.messages)
+  println("\n9- (Stack) Censored domain: " + t.messages)
 
-  val z = new TransformerVisitor(m => tailCensore(List("spam"))(user1.getMail))
+  //TransformerVisitor with currying tail recursion
+  val z = new TransformerVisitor(m => tailCensore(List("spam", "you"))(m))
   user1.accept(z)
-  println("\nCensored user: " + z.messages)
+  println("\n9- (Tail) Censored user: " + z.messages)
 
   def stackCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
     val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
-    var messagesListRecursive:List[Message] = Nil
+    var messagesListRecursive: List[Message] = Nil
 
     if (messagesList.nonEmpty) {
       censoredMessageList.addOne(containsSpamWord(censoredList)(messagesList.head))
@@ -84,11 +87,12 @@ object MailSys extends scala.App {
         curryingTailMessage(c)
       }
     }
+
     curryingTailMessage(0)
     censoredMessageList.toList
   }
 
-  def containsSpamWord(censoredList:List[String])(message: Message): Message = {
+  def containsSpamWord(censoredList: List[String])(message: Message): Message = {
     var censore: Boolean = false
     censoredList.foreach(str => {
       message.getBody.split(" ").foreach(strBody => {
