@@ -16,11 +16,21 @@ public class MailSystem {
     private final List<User> userList;
     private final Map<String, Mailbox> mapUsers;
 
+    /**
+     * Constructor
+     */
     public MailSystem() {
         this.userList = new ArrayList<>();
         this.mapUsers = new HashMap<>();
     }
 
+    /**
+     * Method that create new user in the system and add user and mailbox user in specific lists
+     * @param username -> user username
+     * @param name -> user name
+     * @param yearBirth -> user birth year
+     * @return mailbox of user
+     */
     public Mailbox createNewUser(String username, String name, int yearBirth) {
         User user = new User(username, name, yearBirth);
         Mailbox mailbox = new Mailbox(user, mailStore);
@@ -31,19 +41,36 @@ public class MailSystem {
         return mailbox;
     }
 
+    /**
+     * Method that catch all messages of the current mail store
+     * @return list of all messages of the current mail store
+     */
     public List<Message> getAllMessages() {
         return mailStore.getAllMessages();
 
     }
 
+    /**
+     * Return users map from mail store
+     * @return users map
+     */
     public Map<String, Mailbox> getAllMailboxes() {
         return mapUsers;
     }
 
+    /**
+     * Return users list from mail system
+     * @return users list
+     */
     public List<User> getAllUsers() {
         return userList;
     }
 
+    /**
+     * Method that filter messages list based on a predicate
+     * @param predicate -> predicate to filter list
+     * @return list of messages filtered by the predicate
+     */
     public List<Message> filterMessageGlobally(Predicate<Message> predicate) {
         return getAllMessages()
                 .stream()
@@ -51,18 +78,35 @@ public class MailSystem {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Method that return the total messages of current mail store
+     * @return number of total messages
+     */
     public int countTotalMessages() {
         return getAllMessages().size();
     }
 
+    /**
+     * Method that return the average of messages per user
+     * @return average of messages per user
+     */
     public int avgPerUser() {
         return countTotalMessages() / userList.size();
     }
 
+    /**
+     * Method that group messages per subject
+     * @return map list of grouped messages per subject
+     */
     public Map<String, List<Message>> groupPerSubject() {
         return getAllMessages().stream().collect(Collectors.groupingBy(Message::getSubject));
     }
 
+    /**
+     * Method that count the words of all messages of a specific group of users with the same name
+     * @param name -> name of users
+     * @return number of words
+     */
     public int countParticularName(String name) {
         List<User> users = userList
                 .stream()
@@ -81,6 +125,11 @@ public class MailSystem {
         return count;
     }
 
+    /**
+     * Method that filter the message list with users who has born before the certain year
+     * @param year -> year
+     * @return message list filtered with users who has born before the certain year
+     */
     public List<Message> messagesBornBefore(int year) {
         List<User> users = userList
                 .stream()
@@ -93,6 +142,13 @@ public class MailSystem {
 
     }
 
+    /**
+     * Method that create a new instance of mail store and invoke Log depending on annotation log parameter
+     * @param config -> annotation with store and log fields
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
     public void readMailStore(Config config) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class mailStoreType = Class.forName(config.store());
         Object newMailStore = mailStoreType.newInstance();
@@ -102,6 +158,9 @@ public class MailSystem {
             mailStore = (MailStore) newMailStore;
     }
 
+    /**
+     * Method that change current mail store to another mail store saving the users messages
+     */
     public void changeMailStore() {
         if (mailStore instanceof MemoryMailStore) {
             FileWriter myWriter;

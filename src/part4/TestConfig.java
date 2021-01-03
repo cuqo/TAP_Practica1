@@ -1,13 +1,9 @@
 package part4;
 
 import part1.*;
-
-import java.io.File;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.function.Predicate;
 
 public class TestConfig {
     public static void main(String[] args) {
@@ -23,11 +19,7 @@ public class TestConfig {
                 Config config = (Config) annotation;
                 try {
                     mailSystem.readMailStore(config);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
                 }
 

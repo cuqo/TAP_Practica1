@@ -9,6 +9,11 @@ public class Log implements InvocationHandler {
 
     private final Object target;
 
+    /**
+     * Method that instantiate the object through Log class
+     * @param target -> object to instantiate
+     * @return new instance of the object
+     */
     public static Object newInstance(Object target) {
         Class targetClass = target.getClass();
         Class[] interfaces = targetClass.getInterfaces();
@@ -16,10 +21,19 @@ public class Log implements InvocationHandler {
                 interfaces, new Log(target));
     }
 
-    private Log(Object target) {
-        this.target = target;
-    }
+    /**
+     * Constructor
+     * @param target -> object to instantiate
+     */
+    private Log(Object target) { this.target = target; }
 
+    /**
+     * Method that is invoked when a method of object instantiated is invoked
+     * @param proxy -> instantiated object
+     * @param method -> method called
+     * @param args -> args of method called
+     * @return
+     */
     public Object invoke(Object proxy, Method method, Object[] args) {
         Object invocationResult = null;
         try {
