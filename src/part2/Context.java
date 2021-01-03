@@ -3,6 +3,10 @@ package part2;
 public class Context {
     private final Strategy strategy;
 
+    /**
+     * Constructor that defines the strategy is going to be followed
+     * @param strategy -> strategy object to be used
+     */
     public Context(Strategy strategy) {
         this.strategy = strategy;
     }

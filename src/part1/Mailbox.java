@@ -28,7 +28,7 @@ public class Mailbox implements UserMailingOperations {
     }
 
     /**
-     * Override method that update mailbox messages list and sort it by sent time
+     * Override method that updates mailbox messages list and sorts it by sent time
      */
     @Override
     public void updateMail() {

@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class FileMailStore implements MailStore {
 
     /**
-     * Override method that receive a Message and append the message in file
+     * Override method that receives a Message and append the message in file
      * @param msg -> Message to save in file
      */
     @Override
@@ -35,7 +35,7 @@ public class FileMailStore implements MailStore {
     }
 
     /**
-     * Override method that filter the messages of an specific user
+     * Override method that filters the messages of an specific user
      * @param username -> username of the specific user
      * @return list of messages of the specific user
      */

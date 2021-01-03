@@ -10,6 +10,9 @@ public class CipherBody implements Strategy {
     private Cipher cipher;
     private final java.security.Key aesKey;
 
+    /**
+     * Constructor. It initializes the key that will be used to cipher and decipher
+     */
     public CipherBody() {
         String key = "IWantToPassTAP12"; // 128 bit key
         aesKey =
@@ -21,6 +24,11 @@ public class CipherBody implements Strategy {
         }
     }
 
+    /**
+     * Method that ciphers the body of the message
+     * @param body -> body of the message
+     * @return body of the message ciphered
+     */
     @Override
     public String sendMail(String body) {
 
@@ -36,6 +44,11 @@ public class CipherBody implements Strategy {
         return Base64.getEncoder().encodeToString(encrypted);
     }
 
+    /**
+     * Method that deciphers the body of the message
+     * @param body -> body of the message ciphered
+     * @return body of the message deciphered
+     */
     @Override
     public String getMail(String body) {
         byte[] encrypted = Base64.getDecoder().decode(body.getBytes());
