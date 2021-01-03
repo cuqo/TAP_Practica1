@@ -170,5 +170,4 @@ public class MailSystem {
             ((MemoryMailStore) mailStore).setMailList(aux);
         }
     }
-
 }

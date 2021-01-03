@@ -8,6 +8,11 @@ import part2.Context;
 import part2.ReverseBody;
 
 public class FileMailStoreFactory implements MailStoreFactory {
+
+    /**
+     * Method that generate new instance of FileMailStore with wrappers
+     * @return new instance of FileMailStore
+     */
     public MailStore createMailStore() {
         return new BodyDecorator(new FileMailStore(), new Context(new ReverseBody()), new Context(new CipherBody()));
     }

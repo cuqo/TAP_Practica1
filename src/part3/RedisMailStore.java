@@ -14,15 +14,28 @@ public class RedisMailStore implements MailStore {
 
     private final Redis redis;
 
+    /**
+     * Constructor
+     * @param redis -> redis database instance
+     */
     public RedisMailStore(Redis redis) {
         this.redis = redis;
     }
 
+    /**
+     * Override method that receive a Message and save in redis database
+     * @param msg -> Message to save in redis database
+     */
     @Override
     public void sendMail(Message msg) {
         redis.lpushMail(msg);
     }
 
+    /**
+     * Override method that filter the messages of an specific user
+     * @param username -> username of the specific user
+     * @return list of messages of the specific user
+     */
     @Override
     public List<Message> getMail(String username) {
         List<String> redisMsg = redis.lrangeMail(username);
@@ -44,6 +57,10 @@ public class RedisMailStore implements MailStore {
         return messageList;
     }
 
+    /**
+     * Override method that catch all messages in redis database
+     * @return list of all messages in redis database
+     */
     @Override
     public List<Message> getAllMessages() {
         List<Message> messageList = new ArrayList<>();
