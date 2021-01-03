@@ -65,6 +65,12 @@ object MailSys extends scala.App {
   user1.accept(z)
   println("\n9- (Tail) Censored user: " + z.messages)
 
+  /**
+   * Recursive stack method that censore message body if they contain censored words passed by parameter
+   * @param censoredList -> list of words to censore
+   * @param messagesList -> list of messages to censore
+   * @return
+   */
   def stackCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
     val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
     var messagesListRecursive: List[Message] = Nil
@@ -77,6 +83,12 @@ object MailSys extends scala.App {
     censoredMessageList.toList
   }
 
+  /**
+   * Recursive tail method that censore message body if they contain censored words passed by parameter
+   * @param censoredList -> list of words to censore
+   * @param messagesList -> list of messages to censore
+   * @return
+   */
   def tailCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
     val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
 
@@ -92,6 +104,12 @@ object MailSys extends scala.App {
     censoredMessageList.toList
   }
 
+  /**
+   * Method that change message body if it contains any of the censored words
+   * @param censoredList -> list of words to censore
+   * @param message -> message to censore
+   * @return
+   */
   def containsSpamWord(censoredList: List[String])(message: Message): Message = {
     var censore: Boolean = false
     censoredList.foreach(str => {
