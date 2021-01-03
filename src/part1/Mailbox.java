@@ -11,14 +11,25 @@ public class Mailbox implements UserMailingOperations {
     private List<Message> messages = new ArrayList<>();
     private MailStore mailStore;
 
+    /**
+     * Empty constructor
+     */
     public Mailbox() {
     }
 
+    /**
+     * Constructor
+     * @param account -> current mailbox user
+     * @param mailStore -> current mail store
+     */
     public Mailbox(User account, MailStore mailStore) {
         this.account = account;
         this.mailStore = mailStore;
     }
 
+    /**
+     * Override method that update mailbox messages list and sort it by sent time
+     */
     @Override
     public void updateMail() {
         messages = mailStore.getMail(account.getUsername());
@@ -28,18 +39,33 @@ public class Mailbox implements UserMailingOperations {
         messages.sort(Comparator.comparing(Message::getSentTime).reversed());
     }
 
+    /**
+     * Override method that return the current message list
+     * @return list of user messages
+     */
     @Override
     public List<Message> listMail() {
 
         return messages;
     }
 
+    /**
+     * Override method that save a message in current mail store
+     * @param destination -> receiver of the message
+     * @param subject -> subject of the message
+     * @param body -> body of the message
+     */
     @Override
     public void sendMail(String destination, String subject, String body) {
         Message message = new Message(account.getUsername(), destination, subject, body);
         mailStore.sendMail(message);
     }
 
+    /**
+     * Override method that sort the message list based on condition parameter
+     * @param cond -> value to decide the sort parameter of the list
+     * @return list of messages sorted by condition
+     */
     @Override
     public List<Message> listSortedMail(String cond) {
         List<Message> sortedList;
@@ -76,6 +102,11 @@ public class Mailbox implements UserMailingOperations {
         return sortedList;
     }
 
+    /**
+     * Override method that filter message list based on a predicate
+     * @param predicate -> predicate to filter list
+     * @return list of messages filtered by the predicate
+     */
     @Override
     public List<Message> filterUserMail(Predicate<Message> predicate) {
         return messages

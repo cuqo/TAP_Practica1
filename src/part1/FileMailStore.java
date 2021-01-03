@@ -17,6 +17,10 @@ import java.util.stream.Collectors;
 )
 public class FileMailStore implements MailStore {
 
+    /**
+     * Override method that receive a Message and append the message in file
+     * @param msg -> Message to save in file
+     */
     @Override
     public void sendMail(Message msg) {
 
@@ -30,6 +34,12 @@ public class FileMailStore implements MailStore {
         }
     }
 
+    /**
+     * Override method that filter the messages of an specific user
+     * @param username -> username of the specific user
+     * @return list of messages of the specific user
+     */
+    @Override
     public List<Message> getMail(String username) {
         return readFile()
                 .stream()
@@ -37,12 +47,20 @@ public class FileMailStore implements MailStore {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Override method that catch all messages of the file
+     * @return list of all messages of the file
+     */
     @Override
     public List<Message> getAllMessages() {
 
         return readFile();
     }
 
+    /**
+     * Method to read the file
+     * @return list of all messages read of the file
+     */
     private List<Message> readFile() {
         List<Message> messageList = new ArrayList<>();
         try {
@@ -51,14 +69,10 @@ public class FileMailStore implements MailStore {
                 String line = scan.nextLine();
                 String[] msg = line.split(";");
 
-
                 DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
                 Date date = format.parse(msg[2]);
                 Message aux = new Message(msg[0], msg[1], date, msg[3], msg[4]);
                 messageList.add(aux);
-
-                //System.out.println(aux);
-
             }
         } catch (FileNotFoundException | ParseException e) {
             e.printStackTrace();

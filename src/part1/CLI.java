@@ -7,10 +7,17 @@ public class CLI {
 
     private final MailSystem mailSystem;
 
+    /**
+     * Constructor
+     * @param mailSystem -> current mail system
+     */
     public CLI(MailSystem mailSystem) {
         this.mailSystem = mailSystem;
     }
 
+    /**
+     * command line interface for create user, filter mail, login as user and exit
+     */
     public void cliOperations() {
         Scanner teclat = new Scanner(System.in);
         String line = "";
@@ -54,6 +61,11 @@ public class CLI {
         }
     }
 
+    /**
+     * command line interface for user operations: send mail, update mail, list mail, sort mail, filter mail and logout
+     * @param mailbox -> current user mailbox
+     * @param username -> current user username
+     */
     public void cliUser(Mailbox mailbox, String username) {
         Scanner teclat = new Scanner(System.in);
         String line = "";
@@ -100,6 +112,9 @@ public class CLI {
         }
     }
 
+    /**
+     * command line interface menu
+     */
     public void menuCLI() {
         System.out.println("***********************************************");
         System.out.println("*- createuser <username> <name> <birthYear>   *");
@@ -109,6 +124,9 @@ public class CLI {
         System.out.println("***********************************************");
     }
 
+    /**
+     * command line interface user menu
+     */
     public void menuUserCLI() {
         System.out.println("*****************************************************************");
         System.out.println("*- send <to> \"subject\" \"body\"                                   *");
