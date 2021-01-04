@@ -40,4 +40,17 @@ public class User {
     public int getYearBirth() {
         return yearBirth;
     }
+
+    /**
+     * Method that print user
+     * @return print user
+     */
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", yearBirth=" + yearBirth +
+                '}';
+    }
 }

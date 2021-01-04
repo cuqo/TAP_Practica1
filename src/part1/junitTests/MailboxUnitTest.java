@@ -45,23 +45,23 @@ public class MailboxUnitTest {
 
         List<Message> test = mailbox.listSortedMail("sender");
         messages.sort(Comparator.comparing(Message::getSender));
-        assertEquals(test, messages);
+        assertEquals(messages, test);
 
         test = mailbox.listSortedMail("receiver");
         messages.sort(Comparator.comparing(Message::getReceiver));
-        assertEquals(test, messages);
+        assertEquals(messages, test);
 
         test = mailbox.listSortedMail("sentTime");
         messages.sort(Comparator.comparing(Message::getSentTime));
-        assertEquals(test, messages);
+        assertEquals(messages, test);
 
         test = mailbox.listSortedMail("subject");
         messages.sort(Comparator.comparing(Message::getSubject));
-        assertEquals(test, messages);
+        assertEquals(messages, test);
 
         test = mailbox.listSortedMail("body");
         messages.sort(Comparator.comparing(Message::getBody));
-        assertEquals(test, messages);
+        assertEquals(messages, test);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class MailboxUnitTest {
         auxFilterList.add(messages.get(5));
 
         List<Message> test = mailbox.filterUserMail(message -> message.getSubject().contains("Cita"));
-        assertEquals(test, auxFilterList);
+        assertEquals(auxFilterList, test);
     }
 
     @Test
@@ -82,6 +82,6 @@ public class MailboxUnitTest {
 
         mailbox.updateMail();
         List<Message> test = mailbox.listMail();
-        assertEquals(test,  messages.stream().filter(message -> message.getReceiver().equals("user2")).collect(Collectors.toList()));
+        assertEquals(messages.stream().filter(message -> message.getReceiver().equals("user2")).collect(Collectors.toList()), test);
     }
 }

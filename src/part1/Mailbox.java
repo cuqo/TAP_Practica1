@@ -122,4 +122,17 @@ public class Mailbox implements UserMailingOperations {
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
+
+    /**
+     * Method that print current mailbox
+     * @return print mailbox
+     */
+    @Override
+    public String toString() {
+        return "Mailbox{" +
+                "account=" + account +
+                ", messages=" + messages +
+                ", mailStore=" + mailStore +
+                '}';
+    }
 }

@@ -106,7 +106,7 @@ public class MailSystem {
     }
 
     /**
-     * Method that count the words of all messages of a specific group of users with the same name
+     * Method that count the words of all messages sent of a specific group of users with the same name
      * @param name -> name of users
      * @return number of words
      */

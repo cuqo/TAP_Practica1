@@ -3,15 +3,23 @@ package part1.junitTests;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import part1.MailStore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UnitTestRunner {
 
     public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(MailStoreUnitTest.class);
-        for (Failure failure : result.getFailures()) {
-            System.out.println(failure.toString());
-        }
-        System.out.println(result.wasSuccessful());
+        List<Result> results = new ArrayList<>();
+        //results.add(JUnitCore.runClasses(MailStoreUnitTest.class));
+        results.add(JUnitCore.runClasses(MailboxUnitTest.class));
+        results.add(JUnitCore.runClasses(MailSystemUnitTest.class));
+
+        results.forEach(result -> {
+            for (Failure failure : result.getFailures()) {
+                System.out.println(failure.toString());
+            }
+            System.out.println(result.wasSuccessful());
+        });
     }
 }

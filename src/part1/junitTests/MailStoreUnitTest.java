@@ -16,8 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class MailStoreUnitTest {
-
-    User user;
+    
     MailStore memoryMailStore, fileMailStore;
     List<Message> messages;
 
@@ -25,7 +24,6 @@ public class MailStoreUnitTest {
     public void setup() {
         memoryMailStore = new MemoryMailStore();
         fileMailStore = new FileMailStore();
-        user = new User("user2", "John", 1995);
         messages = new ArrayList<>();
         messages.add(new Message("user1", "user2", "hola Joan", "Hola que tal?"));
         messages.add(new Message("user2", "user3", "hola Maria", "Ei que passa?"));
@@ -46,7 +44,7 @@ public class MailStoreUnitTest {
         auxList.add(messages.get(0));
         auxList.add(messages.get(2));
         auxList.add(messages.get(5));
-        assertEquals(test, auxList);
+        assertEquals(auxList, test);
     }
 
     @Test
@@ -59,6 +57,6 @@ public class MailStoreUnitTest {
         auxList.add(messages.get(0));
         auxList.add(messages.get(2));
         auxList.add(messages.get(5));
-        assertEquals(test.toString(), auxList.toString());
+        assertEquals(auxList.toString(), test.toString());
     }
 }
