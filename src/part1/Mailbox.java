@@ -114,4 +114,12 @@ public class Mailbox implements UserMailingOperations {
                 .filter(predicate)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Set the message list with list passed by parameter
+     * @param messages -> current message list
+     */
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }

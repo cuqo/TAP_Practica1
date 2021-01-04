@@ -100,7 +100,7 @@ public class Message {
      * @return print message
      */
     public String toStringFile() {
-        return sender + ';' + receiver + ';' + sentTime + ';' + subject + ";" + body + ";\n";
+        return sender + ';' + receiver + ';' + sentTime.getTime() + ';' + subject + ";" + body + ";\n";
     }
 
     /**

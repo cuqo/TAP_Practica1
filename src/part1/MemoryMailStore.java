@@ -4,6 +4,7 @@ import part4.Config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Config(
         store = "part1.MemoryMailStore",
@@ -29,14 +30,10 @@ public class MemoryMailStore implements MailStore {
      */
     @Override
     public List<Message> getMail(String username) {
-        List<Message> messages = new ArrayList<>();
-
-        for (Message message : mailList) {
-            if (message.getReceiver().equals(username))
-                messages.add(message);
-        }
-
-        return messages;
+        return mailList
+                .stream()
+                .filter(m -> m.getReceiver().equals(username))
+                .collect(Collectors.toList());
     }
 
     /**

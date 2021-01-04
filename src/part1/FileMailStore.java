@@ -69,12 +69,11 @@ public class FileMailStore implements MailStore {
                 String line = scan.nextLine();
                 String[] msg = line.split(";");
 
-                DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-                Date date = format.parse(msg[2]);
+                Date date = new Date(Long.parseLong(msg[2]));
                 Message aux = new Message(msg[0], msg[1], date, msg[3], msg[4]);
                 messageList.add(aux);
             }
-        } catch (FileNotFoundException | ParseException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
