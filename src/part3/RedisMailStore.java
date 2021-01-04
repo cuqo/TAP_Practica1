@@ -43,14 +43,7 @@ public class RedisMailStore implements MailStore {
         redisMsg.forEach(str -> {
             String[] msg = str.split(";");
 
-
-            DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-            Date date = null;
-            try {
-                date = format.parse(msg[2]);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            Date date = new Date(Long.parseLong(msg[2]));
             Message aux = new Message(msg[0], msg[1], date, msg[3], msg[4]);
             messageList.add(aux);
         });

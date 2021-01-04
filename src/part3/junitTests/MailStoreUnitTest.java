@@ -48,8 +48,8 @@ public class MailStoreUnitTest {
     }
 
     @Test
-    public void testGetAllMessagesFileMailStore() {
-        System.out.println("testGetAllMessagesFileMailStore");
+    public void testGetAllMessagesRedisMailStore() {
+        System.out.println("testGetAllMessagesRedisMailStore");
 
         List<Message> test = redisMailStore.getAllMessages();
         assertEquals(messages.toString(), test.toString());
