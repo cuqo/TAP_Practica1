@@ -145,9 +145,9 @@ public class MailSystem {
     /**
      * Method that create a new instance of mail store and invoke Log depending on annotation log parameter
      * @param config -> annotation with store and log fields
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @throws ClassNotFoundException -> exception class not found
+     * @throws IllegalAccessException -> exception illegal access
+     * @throws InstantiationException -> exception when instantiating
      */
     public void readMailStore(Config config) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class mailStoreType = Class.forName(config.store());

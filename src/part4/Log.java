@@ -28,11 +28,11 @@ public class Log implements InvocationHandler {
     private Log(Object target) { this.target = target; }
 
     /**
-     * Method that is invoked when a method of object instantiated is invoked
+     * Method that is invoked when a method of object instantiated is called
      * @param proxy -> instantiated object
      * @param method -> method called
      * @param args -> args of method called
-     * @return
+     * @return method called invoked
      */
     public Object invoke(Object proxy, Method method, Object[] args) {
         Object invocationResult = null;
