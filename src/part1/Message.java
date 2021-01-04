@@ -108,7 +108,7 @@ public class Message {
      * @return print message
      */
     public String toStringRedis() {
-        return sender + ';' + receiver + ';' + sentTime + ';' + subject + ";" + body + ";";
+        return sender + ';' + receiver + ';' + sentTime.getTime() + ';' + subject + ";" + body + ";";
     }
 
     /**
