@@ -55,4 +55,6 @@ public class MemoryMailStore implements MailStore {
     public void setMailList(List<Message> mailList) {
         this.mailList = mailList;
     }
+
+
 }
