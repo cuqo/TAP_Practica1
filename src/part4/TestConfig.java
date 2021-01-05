@@ -10,18 +10,18 @@ public class TestConfig {
         List<Class> mailStoreClasses = new ArrayList<>();
         MailSystem mailSystem = new MailSystem();
 
-        mailStoreClasses.add(MemoryMailStore.class);
+        /*mailStoreClasses.add(MemoryMailStore.class);*/
         mailStoreClasses.add(FileMailStore.class);
 
         for (Class mailStoreClass : mailStoreClasses) {
-            if (mailStoreClass.isAnnotationPresent(Config.class)) {
-                Annotation annotation = mailStoreClass.getAnnotation(Config.class);
-                Config config = (Config) annotation;
-                try {
-                    mailSystem.readMailStore(config);
+            /*if (mailStoreClass.isAnnotationPresent(Config.class)) {*/
+                /*Annotation annotation = mailStoreClass.getAnnotation(Config.class);
+                Config config = (Config) annotation;*/
+                /*try {
+                    mailSystem.readMailStore();
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
                     e.printStackTrace();
-                }
+                }*/
 
                 //2. Create at least 3 users, two have the same name but different username.
                 Mailbox mailbox1 = mailSystem.createNewUser("user1", "Joan", 2000);
@@ -51,7 +51,7 @@ public class TestConfig {
                 msg = mailSystem.getAllMessages();
                 System.out.print("8: ");
                 msg.forEach(System.out::println);
-            }
+            /*}*/
         }
     }
 }

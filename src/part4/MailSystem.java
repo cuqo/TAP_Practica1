@@ -4,6 +4,7 @@ import part1.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,10 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@Config(
+        store = "part1.FileMailStore",
+        log = true
+)
 public class MailSystem {
     private MailStore mailStore;
     private final List<User> userList;
@@ -20,6 +25,11 @@ public class MailSystem {
      * Constructor
      */
     public MailSystem() {
+        try {
+            readMailStore();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
         this.userList = new ArrayList<>();
         this.mapUsers = new HashMap<>();
     }
@@ -144,12 +154,12 @@ public class MailSystem {
 
     /**
      * Method that create a new instance of mail store and invoke Log depending on annotation log parameter
-     * @param config -> annotation with store and log fields
      * @throws ClassNotFoundException -> exception class not found
      * @throws IllegalAccessException -> exception illegal access
      * @throws InstantiationException -> exception when instantiating
      */
-    public void readMailStore(Config config) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public void readMailStore() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Config config = MailSystem.class.getAnnotation(Config.class);
         Class mailStoreType = Class.forName(config.store());
         Object newMailStore = mailStoreType.newInstance();
         if (config.log())
