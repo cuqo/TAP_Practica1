@@ -1,6 +1,5 @@
 package part1;
 
-import part4.Config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

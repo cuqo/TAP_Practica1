@@ -4,9 +4,6 @@ import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class UnitTestRunner {
 
     public static void main(String[] args) {

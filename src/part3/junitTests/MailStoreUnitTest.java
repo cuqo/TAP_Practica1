@@ -2,9 +2,7 @@ package part3.junitTests;
 
 import org.junit.Before;
 import org.junit.Test;
-import part1.FileMailStore;
 import part1.MailStore;
-import part1.MemoryMailStore;
 import part1.Message;
 import part3.Redis;
 import part3.RedisMailStore;

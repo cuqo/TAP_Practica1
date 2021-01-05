@@ -4,7 +4,6 @@ import part1.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,7 +25,7 @@ public class MailSystem {
      */
     public MailSystem() {
         try {
-            readMailStore();
+            this.mailStore = readMailStore();
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
@@ -158,14 +157,15 @@ public class MailSystem {
      * @throws IllegalAccessException -> exception illegal access
      * @throws InstantiationException -> exception when instantiating
      */
-    public void readMailStore() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public MailStore readMailStore() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Config config = MailSystem.class.getAnnotation(Config.class);
-        Class mailStoreType = Class.forName(config.store());
-        Object newMailStore = mailStoreType.newInstance();
+        Object newMailStore = Class.forName(config.store()).newInstance();
         if (config.log())
             mailStore = (MailStore) Log.newInstance(newMailStore);
         else
             mailStore = (MailStore) newMailStore;
+
+        return mailStore;
     }
 
     /**
@@ -194,4 +194,11 @@ public class MailSystem {
         }
     }
 
+    /**
+     * Returns current mail store
+     * @return mail store
+     */
+    public MailStore getMailStore() {
+        return mailStore;
+    }
 }

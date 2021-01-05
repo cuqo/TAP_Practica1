@@ -13,18 +13,14 @@ import static org.junit.Assert.assertEquals;
 
 public class MailboxUnitTest {
 
-    MailSystem memoryMailSystem, fileMailSystem;
     Mailbox mailbox;
     User user;
-    MailStore memoryMailStore, fileMailStore;
+    MailStore memoryMailStore;
     List<Message> messages;
 
     @Before
     public void setup() {
-        memoryMailSystem = new MailSystem(new MemoryMailStore());
-        fileMailSystem = new MailSystem(new FileMailStore());
         memoryMailStore = new MemoryMailStore();
-        fileMailStore = new FileMailStore();
         user = new User("user2", "John", 1995);
         mailbox = new Mailbox(user, memoryMailStore);
         messages = new ArrayList<>();

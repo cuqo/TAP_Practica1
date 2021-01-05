@@ -1,7 +1,5 @@
 package part1;
 
-import part4.Config;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,5 +47,14 @@ public class MemoryMailStore implements MailStore {
         this.mailList = mailList;
     }
 
-
+    /**
+     * Method that print mail store
+     * @return print mail store
+     */
+    @Override
+    public String toString() {
+        return "MemoryMailStore{" +
+                "mailList=" + mailList +
+                '}';
+    }
 }
