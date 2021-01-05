@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Config(
-        store = "part1.MemoryMailStore",
-        log = true
-)
 public class MemoryMailStore implements MailStore {
 
     private List<Message> mailList = new ArrayList<>();

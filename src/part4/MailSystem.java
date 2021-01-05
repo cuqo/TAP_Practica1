@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Config(
-        store = "part1.FileMailStore",
+        store = "part1.MemoryMailStore",
         log = true
 )
 public class MailSystem {

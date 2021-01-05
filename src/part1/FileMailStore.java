@@ -8,10 +8,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Config(
-        store = "part1.FileMailStore",
-        log = true
-)
 public class FileMailStore implements MailStore {
 
     /**
