@@ -8,7 +8,10 @@ import part3.Redis;
 import part3.RedisMailStore;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,11 +41,15 @@ public class MailStoreUnitTest {
         System.out.println("testGetMailRedisMailStore");
 
         List<Message> test = redisMailStore.getMail("user2");
+        redis.flushAll();
+        Collections.reverse(test);
+
         List<Message> auxList = new ArrayList<>();
         auxList.add(messages.get(0));
         auxList.add(messages.get(2));
         auxList.add(messages.get(5));
-        assertEquals(auxList, test);
+        assertEquals(auxList.toString(), test.toString());
+
     }
 
     @Test
@@ -50,7 +57,12 @@ public class MailStoreUnitTest {
         System.out.println("testGetAllMessagesRedisMailStore");
 
         List<Message> test = redisMailStore.getAllMessages();
+        redis.flushAll();
+        Collections.reverse(test);
+        test.sort(Comparator.comparing(Message::getSubject));
+        messages.sort(Comparator.comparing(Message::getSubject));
         assertEquals(messages.toString(), test.toString());
+
     }
 
     @Test
@@ -58,10 +70,16 @@ public class MailStoreUnitTest {
         System.out.println("testGetAllMessagesFileMailStore");
 
         List<String> test = redis.lrangeMail("user2");
+        redis.flushAll();
+
+        Collections.reverse(test);
+
         List<String> auxList = new ArrayList<>();
         auxList.add(messages.get(0).toStringRedis());
         auxList.add(messages.get(2).toStringRedis());
         auxList.add(messages.get(5).toStringRedis());
-        assertEquals(messages.toString(), test.toString());
+
+        assertEquals(auxList.toString(), test.toString());
+
     }
 }
