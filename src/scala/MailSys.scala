@@ -92,7 +92,8 @@ object MailSys extends scala.App {
   def tailCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
     val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
 
-    @tailrec def curryingTailMessage(count: Int): Unit = {
+    @tailrec
+    def curryingTailMessage(count: Int): Unit = {
       if (count < messagesList.size) {
         censoredMessageList.addOne(containsSpamWord(censoredList)(messagesList(count)))
         val c = count + 1

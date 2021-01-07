@@ -1,7 +1,9 @@
 package scala
 
 import part1.Message
+
 import java.util.function.Predicate
+import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
 import scala.jdk.CollectionConverters._
 
@@ -122,5 +124,66 @@ class TransformerVisitor(op: List[Message] => List[Message]) extends VisitorInte
   override def visit(domain: Domain): Unit = {
     m = op(domain.getMail)
     messages.addAll(m)
+  }
+
+  /**
+   * Recursive stack method that censore message body if they contain censored words passed by parameter
+   * @param censoredList -> list of words to censore
+   * @param messagesList -> list of messages to censore
+   * @return
+   */
+  def stackCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
+    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
+    var messagesListRecursive: List[Message] = Nil
+
+    if (messagesList.nonEmpty) {
+      censoredMessageList.addOne(containsSpamWord(censoredList)(messagesList.head))
+      messagesListRecursive = messagesList.filterNot(m => m.equals(messagesList.head))
+      censoredMessageList.appendAll(stackCensore(censoredList)(messagesListRecursive))
+    }
+    censoredMessageList.toList
+  }
+
+  /**
+   * Recursive tail method that censore message body if they contain censored words passed by parameter
+   * @param censoredList -> list of words to censore
+   * @param messagesList -> list of messages to censore
+   * @return
+   */
+  def tailCensore(censoredList: List[String])(messagesList: List[Message]): List[Message] = {
+    val censoredMessageList: ListBuffer[Message] = new ListBuffer[Message]
+
+    @tailrec
+    def curryingTailMessage(count: Int): Unit = {
+      if (count < messagesList.size) {
+        censoredMessageList.addOne(containsSpamWord(censoredList)(messagesList(count)))
+        val c = count + 1
+        curryingTailMessage(c)
+      }
+    }
+
+    curryingTailMessage(0)
+    censoredMessageList.toList
+  }
+
+  /**
+   * Method that change message body if it contains any of the censored words
+   * @param censoredList -> list of words to censore
+   * @param message -> message to censore
+   * @return
+   */
+  def containsSpamWord(censoredList: List[String])(message: Message): Message = {
+    var censore: Boolean = false
+    censoredList.foreach(str => {
+      message.getBody.split(" ").foreach(strBody => {
+        if (strBody.contains(str)) {
+          censore = true
+        }
+      })
+    })
+    if (censore) {
+      val m: Message = new Message(message.getSender, message.getReceiver, message.getSentTime, message.getSubject, "CENSORED")
+      m
+    } else message
   }
 }
