@@ -55,12 +55,6 @@ public class Test {
         //9. Filter messages globally that fulfill the following conditions:
         //  - The message subject is a single word.
         //  - The sender was born after year 2000.
-
-
-        /*msg = mailSystem.getAllMessages().stream()
-                .filter(e -> users.stream().map(User::getName).anyMatch(name -> name.equals(e.getReceiver())) && e.getSubject().split(" ").length == 1)
-                .collect(Collectors.toList());*/
-
         msg = mailSystem.filterMessageGlobally(message -> {
             List<User> users = mailSystem.getAllUsers()
                     .stream()
